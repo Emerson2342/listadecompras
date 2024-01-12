@@ -13,7 +13,7 @@ export const useHortifrutiContext = () => {
 
 export const HortifrutiContextProvider = ({ children }) => {
   const [hortifruti, setHortifruti] = useState([
-    { tipo: "Hortifruti", produto: "Alface Cresto", valor: 0, quantidade: 1 },
+    { tipo: "Hortifruti", produto: "Alface Crespo", valor: 0, quantidade: 1 },
     { tipo: "Hortifruti", produto: "Alface Liso", valor: 0, quantidade: 1 },
     { tipo: "Hortifruti", produto: "Cenoura", valor: 0, quantidade: 1 },
     { tipo: "Hortifruti", produto: "Couve", valor: 0, quantidade: 1 },

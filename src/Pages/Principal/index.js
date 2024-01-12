@@ -1,6 +1,34 @@
 import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  FlatList,
+  ImageBackground,
+  Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+
+const data = [
+  { id: "1", category: "Limpeza" },
+  { id: "2", category: "Bebidas" },
+  { id: "3", category: "Higiene Pessoal" },
+  { id: "4", category: "Hortifruti" },
+  { id: "5", category: "Temperos" },
+  { id: "6", category: "Alimentos" },
+  // Adicione mais itens conforme necessário
+];
+
+const imageMapping = {
+  Limpeza: require("../../Imagens/limpeza.jpg"),
+  Bebidas: require("../../Imagens/bebidas.jpg"),
+  "Higiene Pessoal": require("../../Imagens/higienePessoal.jpg"),
+  Hortifruti: require("../../Imagens/hortifruti.jpg"),
+  Temperos: require("../../Imagens/temperos.jpg"),
+  Alimentos: require("../../Imagens/alimentos.jpg"),
+};
 
 export default function Principal() {
   const navigation = useNavigation();
@@ -9,70 +37,85 @@ export default function Principal() {
     navigation.navigate(pageName);
   };
 
+  const renderItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.lista}
+      onPress={() => navigateToPage(item.category)}
+    >
+      <ImageBackground source={imageMapping[item.category]} style={styles.img}>
+        <Text style={styles.text}>{item.category}</Text>
+      </ImageBackground>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigateToPage("Limpeza")}
-      >
-        <Text style={styles.buttonText}> Limpeza</Text>
-      </TouchableOpacity>
+      <View>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          numColumns={2} // Pode ajustar o número de colunas conforme necessário
+        />
+      </View>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigateToPage("Bebidas")}
-      >
-        <Text style={styles.buttonText}>Bebidas</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigateToPage("HigienePessoal")}
-      >
-        <Text style={styles.buttonText}>Higiene Pessoal</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigateToPage("Hortifruti")}
-      >
-        <Text style={styles.buttonText}>Hortifruti</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigateToPage("Temperos")}
-      >
-        <Text style={styles.buttonText}>Temperos</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigateToPage("Carrinho")}
+        onPress={() => navigation.navigate("Carrinho")}
       >
         <Text style={styles.buttonText}>Carrinho</Text>
+        <Image
+          style={{ right: -10 }}
+          source={require("../../Imagens/carrinhoPrincipal.png")}
+        />
       </TouchableOpacity>
-      {/* Adicione mais TouchableOpacity conforme necessário */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
+    height: "100%",
+    margin: 0,
+    backgroundColor: "#ffff",
     alignItems: "center",
+  },
+  lista: {
+    margin: 3,
+    height: 120,
     justifyContent: "center",
   },
+  text: {
+    color: "#363636",
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+
+  img: {
+    height: 105,
+    width: 169,
+    borderRadius: 7,
+    overflow: "hidden",
+    borderColor: "#8000ff",
+    borderWidth: 3,
+  },
   button: {
-    marginTop: 10,
+    marginTop: -150,
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#8000ff",
     borderRadius: 8,
     padding: 15,
+    width: "80%",
     alignSelf: "center",
+    flexDirection: "row",
+    elevation: 30,
   },
   buttonText: {
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
+    left: -10,
   },
 });

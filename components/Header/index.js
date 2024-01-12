@@ -1,16 +1,12 @@
 import React from "react";
-import { View, StyleSheet, Text, StatusBar } from 'react-native'
+import { View, StyleSheet, Text, StatusBar } from "react-native";
 
 export default function Header() {
-    return (
-        <View style={styles.container}>
-
-        </View>
-    );
+  return <View style={styles.container}></View>;
 }
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#8000ff',
-        paddingTop: 150
-    }
-})
+  container: {
+    backgroundColor: "#8000ff",
+    paddingTop: 80,
+  },
+});

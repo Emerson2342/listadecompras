@@ -13,6 +13,8 @@ import { useBebidasContext } from "../../src/Context/BebidasContext";
 import { useHigieneContext } from "../../src/Context/HigienePessoalContext";
 import { useHortifrutiContext } from "../../src/Context/HortifrutiContext";
 import { useTemperosContext } from "../../src/Context/TemperosContext";
+import { useCarrinhoContext } from "../../src/Context/CarrinhoContext";
+import { useAlimentosContext } from "../../src/Context/AlimentosContext";
 
 export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
   const { limpeza, setLimpeza } = useLimpezaContext();
@@ -20,6 +22,8 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
   const { higiene, setHigiene } = useHigieneContext();
   const { hortifruti, setHortifruti } = useHortifrutiContext();
   const { temperos, setTemperos } = useTemperosContext();
+  const { carrinho, setCarrinho } = useCarrinhoContext();
+  const { alimentos, setAlimentos } = useAlimentosContext();
 
   const [novoItem, setNovoItem] = useState({
     tipo: tipo,
@@ -80,11 +84,15 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
           ? hortifruti[indexDoItemAEditar]
           : tipo === "Temperos"
           ? temperos[indexDoItemAEditar]
-          : // Adicione mais verificações para outros tipos, se necessário
-            null;
+          : tipo === "Carrinho"
+          ? carrinho[indexDoItemAEditar] // Adicione mais verificações para outros tipos, se necessário
+          : tipo === "Alimentos"
+          ? alimentos[indexDoItemAEditar]
+          : null;
 
       if (itemAEditar) {
         setNovoItem({ ...itemAEditar });
+        // setNovoItem({ tipo, produto, valor, quantidade, cart });
       }
     }
   }, [
@@ -94,6 +102,8 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
     higiene,
     hortifruti,
     temperos,
+    carrinho,
+    alimentos,
     tipo,
   ]);
 
@@ -114,8 +124,11 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
           ? [...hortifruti]
           : tipo === "Temperos"
           ? [...temperos]
-          : // Adicione mais verificações para outros tipos, se necessário
-            [];
+          : tipo === "Carrinho"
+          ? [...carrinho] // Adicione mais verificações para outros tipos, se necessário
+          : tipo === "Alimentos"
+          ? [...alimentos]
+          : [];
 
       // Atualize o valor do item específico na cópia da lista
       novaLista[indexDoItemAEditar] = { ...novoItem };
@@ -131,6 +144,10 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
         setHortifruti(novaLista);
       } else if (tipo === "Temperos") {
         setTemperos(novaLista);
+      } else if (tipo === "Carrinho") {
+        setCarrinho(novaLista);
+      } else if (tipo === "Alimentos") {
+        setAlimentos(novaLista);
       }
       // Adicione mais blocos else if para outros tipos, se necessário
 
@@ -163,7 +180,7 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
             onChangeText={(text) =>
               setNovoItem({
                 ...novoItem,
-                valor: text,
+                valor: text.replace(",", "."),
               })
             }
           />

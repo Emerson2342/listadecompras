@@ -27,7 +27,7 @@ export const HigieneContextProvider = ({ children }) => {
     },
     {
       tipo: "Higiene Pessoal",
-      produto: "Escola de Dente",
+      produto: "Escova de Dente",
       valor: 0,
       quantidade: 1,
     },

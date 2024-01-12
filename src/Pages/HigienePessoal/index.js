@@ -9,14 +9,18 @@ import {
   Alert,
   TouchableOpacity,
   Modal,
+  Image,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useHigieneContext } from "../../Context/HigienePessoalContext";
+import { useNavigation } from "@react-navigation/native";
 
 import { useCarrinhoContext } from "../../Context/CarrinhoContext";
 
 export default function Higiene() {
+  const navigation = useNavigation();
+
   const { higiene, setHigiene } = useHigieneContext();
   const { carrinho, setCarrinho } = useCarrinhoContext();
 
@@ -28,6 +32,7 @@ export default function Higiene() {
     produto: "",
     valor: "",
     quantidade: 1,
+    carrinho: false,
   });
 
   const addItem = () => {
@@ -47,26 +52,35 @@ export default function Higiene() {
     setHigiene(novoArray);
   };
 
-  const addAoCarrinho = (index) => {
+  /*  const addAoCarrinho = (index) => {
     const item = higiene[index];
     if (item.valor !== "" && item.valor !== 0) {
       setCarrinho([...carrinho, item]);
+
       setNovoItem("", "");
       Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
       console.log(carrinho);
     } else {
       Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
     }
-  };
+  }; */
 
-  const exibirHigiene = () => {
-    const mensagem = higiene
-      .map((item, index) => {
-        return `Tipo: ${item.tipo}\nProduto: ${item.produto}\nValor: R$ ${item.valor}\nQuantidade: ${item.quantidade}\n`;
-      })
-      .join("\n");
+  const addAoCarrinho = (index) => {
+    const item = higiene[index];
 
-    Alert.alert("Informações dos Itens", mensagem);
+    if (item.valor !== "" && item.valor !== 0) {
+      // Criar uma cópia do objeto antes de modificar
+      const itemCarrinho = { ...item, cart: "Carrinho" };
+
+      // Adicionar o objeto modificado ao carrinho
+      setCarrinho([...carrinho, itemCarrinho]);
+
+      setNovoItem("", "");
+      Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
+      console.log(carrinho);
+    } else {
+      Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
+    }
   };
 
   const confirmar = (indexToRemove) => {
@@ -82,8 +96,14 @@ export default function Higiene() {
         <Text style={styles.textProduto}>
           {index + 1} - {item.produto}
         </Text>
-        <View style={styles.precoContainer}>
-          <Text style={styles.textPreco}>R${item.valor}</Text>
+        <View>
+          <Text style={styles.textPreco}>
+            R$ {""}
+            {(item.valor * (1 || 1)).toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </Text>
         </View>
       </View>
       <View style={styles.iconContainer}>
@@ -91,7 +111,7 @@ export default function Higiene() {
           style={styles.iconContent}
           onPress={() => addAoCarrinho(index)}
         >
-          <MaterialIcons name="shopping-cart" size={24} color="green" />
+          <MaterialIcons name="shopping-cart" size={24} color="#613128" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconContent}
@@ -111,6 +131,7 @@ export default function Higiene() {
   );
   return (
     <View>
+      <View style={styles.imgCarrinho}></View>
       <View style={styles.container}>
         <FlatList
           data={higiene}
@@ -119,18 +140,22 @@ export default function Higiene() {
           numColumns={2} // Configura o número de colunas
         />
       </View>
+      <View style={{ top: 10 }}>
+        <TouchableOpacity onPress={addItem} style={styles.button}>
+          <Text style={styles.buttonText}>Adicionar Novos Itens</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.button, { top: 430 }]} onPress={addItem}>
-        <Text style={styles.buttonText}>Adicionar Itens</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={{ alignItems: "center", top: 10 }}
+          onPress={() => navigation.navigate("Carrinho")}
+        >
+          <Image source={require("../../Imagens/carrinho.png")} />
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.button, { top: 500 }]}
-        onPress={exibirHigiene}
-      >
-        <Text style={styles.buttonText}>Mostrar Itens</Text>
-      </TouchableOpacity>
-
+        {/* <TouchableOpacity onPress={exibirHigiene} style={styles.button}>
+          <Text style={styles.buttonText}>Mostrar Itens</Text>
+        </TouchableOpacity> */}
+      </View>
       <Modal visible={modalVisibleAdd} animationType="fade" transparent={true}>
         <ModalItem
           handleClose={() => setModalVisibleAdd(false)}
@@ -158,41 +183,58 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     maxHeight: 400,
-    backgroundColor: "#fff",
+    backgroundColor: "#fafafa",
     alignItems: "center",
+    backgroundColor: "#ffffffff",
+    elevation: 17,
+    borderColor: "#000",
+    borderWidth: 1,
   },
   higieneContainer: {
-    backgroundColor: "#f2e6ff",
+    //backgroundColor: "#f2e6ff",
+    borderColor: "#000",
+    borderWidth: 1,
     borderRadius: 5,
     padding: 10,
     margin: 5,
     marginLeft: 10,
     width: "45%",
+    elevation: 30,
+    backgroundColor: "#ffffff",
   },
 
   textProduto: {
+    color: "#0045b1",
+    top: -10,
     fontSize: 17,
   },
   textPreco: {
-    fontSize: 15,
-    color: "blue",
+    fontWeight: "bold",
+    color: "#0099cd",
+    fontSize: 17,
   },
   iconContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 5,
+    paddingRight: 5,
+    bottom: -10,
   },
 
   button: {
-    top: 410,
-    position: "absolute",
+    marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#8000ff",
     borderRadius: 8,
     padding: 15,
     alignSelf: "center",
+  },
+  imgCarrinho: {
+    position: "absolute",
+    right: 20,
+    top: 480,
+    zIndex: 4,
   },
 
   buttonText: {

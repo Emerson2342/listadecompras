@@ -12,13 +12,7 @@ export const useCarrinhoContext = () => {
 };
 
 export const CarrinhoContextProvider = ({ children }) => {
-  const [carrinho, setCarrinho] = useState([
-    {
-      produto: "",
-      valor: 0,
-      quantidade: 1,
-    },
-  ]);
+  const [carrinho, setCarrinho] = useState([]);
 
   // Carregar os dados do AsyncStorage quando o componente montar
   useEffect(() => {

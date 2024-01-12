@@ -1,11 +1,33 @@
 {
-  "expo": {
-    "name": "listaDeCompras",
-    "slug": "listaDeCompras",
-    "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+  "cli": {
+    "version": ">= 5.9.3"
   },
-  "name": "listaDeCompras"
+  "build": {
+    "development": {
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
+      }
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  },
+  "expo": {
+    "name": "SeuApp",
+    "version": "1.0.0",
+    "sdkVersion": "47.0.0", 
+    "extra": {
+      "eas": {
+        "projectId": "3bc58fbe-d23d-47cd-9605-7596fb5912b4"
+      }
+    }
+  }
 }

@@ -13,15 +13,15 @@ import {
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useBebidasContext } from "../../Context/BebidasContext";
+import { useAlimentosContext } from "../../Context/AlimentosContext";
 import { useNavigation } from "@react-navigation/native";
 
 import { useCarrinhoContext } from "../../Context/CarrinhoContext";
 
-export default function Bebidas() {
+export default function Alimentos() {
   const navigation = useNavigation();
 
-  const { bebidas, setBebidas } = useBebidasContext();
+  const { alimentos, setAlimentos } = useAlimentosContext();
   const { carrinho, setCarrinho } = useCarrinhoContext();
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
@@ -46,14 +46,14 @@ export default function Bebidas() {
 
   const removerItem = (indexToRemove) => {
     // Criar um novo array excluindo o item com o índice indexToRemove
-    const novoArray = bebidas.filter((_, index) => index !== indexToRemove);
+    const novoArray = alimentos.filter((_, index) => index !== indexToRemove);
 
     // Atualizar o estado com o novo array
-    setBebidas(novoArray);
+    setAlimentos(novoArray);
   };
 
   /*  const addAoCarrinho = (index) => {
-    const item = bebidas[index];
+    const item = alimentos[index];
     if (item.valor !== "" && item.valor !== 0) {
       setCarrinho([...carrinho, item]);
 
@@ -66,7 +66,7 @@ export default function Bebidas() {
   }; */
 
   const addAoCarrinho = (index) => {
-    const item = bebidas[index];
+    const item = alimentos[index];
 
     if (item.valor !== "" && item.valor !== 0) {
       // Criar uma cópia do objeto antes de modificar
@@ -84,19 +84,28 @@ export default function Bebidas() {
   };
 
   const confirmar = (indexToRemove) => {
-    Alert.alert("", "Deseja apagar o item da bebidas?", [
+    Alert.alert("", "Deseja apagar o item da alimentos?", [
       { text: "Não", onPress: () => console.log("Cancelado Exclusão") },
       { text: "Sim", onPress: () => removerItem(indexToRemove) },
     ]);
   };
 
   const renderItem = ({ item, index }) => (
-    <View style={styles.bebidasContainer}>
+    <View style={styles.alimentosContainer}>
       <View style={styles.produtoContainer}>
         <Text style={styles.textProduto}>
           {index + 1} - {item.produto}
         </Text>
         <View>
+          {/*       
+          <Text style={styles.textPreco}>
+            R${" "}
+            {item.valor.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </Text> */}
+
           <Text style={styles.textPreco}>
             R${""}
             {(item.valor * (1 || 1)).toLocaleString("pt-BR", {
@@ -134,7 +143,7 @@ export default function Bebidas() {
       <View style={styles.imgCarrinho}></View>
       <View style={styles.container}>
         <FlatList
-          data={bebidas}
+          data={alimentos}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2} // Configura o número de colunas
@@ -152,15 +161,15 @@ export default function Bebidas() {
           <Image source={require("../../Imagens/carrinho.png")} />
         </TouchableOpacity>
 
-        {/* <TouchableOpacity onPress={exibirBebidas} style={styles.button}>
+        {/*  <TouchableOpacity onPress={exibirAlimentos} style={styles.button}>
           <Text style={styles.buttonText}>Mostrar Itens</Text>
         </TouchableOpacity> */}
       </View>
       <Modal visible={modalVisibleAdd} animationType="fade" transparent={true}>
         <ModalItem
           handleClose={() => setModalVisibleAdd(false)}
-          tipo="Bebidas"
-          addItem={setBebidas}
+          tipo="Alimentos"
+          addItem={setAlimentos}
         />
       </Modal>
 
@@ -171,7 +180,7 @@ export default function Bebidas() {
       >
         <ModalValor
           handleClose={() => setModalVisibleValor(false)}
-          tipo="Bebidas"
+          tipo="Alimentos"
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
@@ -190,7 +199,7 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     borderWidth: 1,
   },
-  bebidasContainer: {
+  alimentosContainer: {
     //backgroundColor: "#f2e6ff",
     borderColor: "#000",
     borderWidth: 1,

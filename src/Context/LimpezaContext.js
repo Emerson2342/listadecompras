@@ -13,13 +13,48 @@ export const useLimpezaContext = () => {
 
 export const LimpezaContextProvider = ({ children }) => {
   const [limpeza, setLimpeza] = useState([
-    { tipo: "Limpeza", produto: "Água Sanitária", valor: 0, quantidade: 1 },
-    { tipo: "Limpeza", produto: "Sabão em pó", valor: 0, quantidade: 1 },
-    { tipo: "Limpeza", produto: "Amaciante", valor: 0, quantidade: 1 },
-    { tipo: "Limpeza", produto: "Detergente", valor: 0, quantidade: 1 },
-    { tipo: "Limpeza", produto: "Desinfetante", valor: 0, quantidade: 1 },
-    { tipo: "Limpeza", produto: "Palha de aço", valor: 0, quantidade: 1 },
-    { tipo: "Limpeza", produto: "Bucha de pia", valor: 0, quantidade: 1 },
+    {
+      tipo: "Limpeza",
+      produto: "Água Sanitária",
+      valor: 0,
+      quantidade: 1,
+    },
+    {
+      tipo: "Limpeza",
+      produto: "Sabão em pó",
+      valor: 0,
+      quantidade: 1,
+    },
+    {
+      tipo: "Limpeza",
+      produto: "Amaciante",
+      valor: 0,
+      quantidade: 1,
+    },
+    {
+      tipo: "Limpeza",
+      produto: "Detergente",
+      valor: 0,
+      quantidade: 1,
+    },
+    {
+      tipo: "Limpeza",
+      produto: "Desinfetante",
+      valor: 0,
+      quantidade: 1,
+    },
+    {
+      tipo: "Limpeza",
+      produto: "Palha de aço",
+      valor: 0,
+      quantidade: 1,
+    },
+    {
+      tipo: "Limpeza",
+      produto: "Bucha de pia",
+      valor: 0,
+      quantidade: 1,
+    },
   ]);
 
   // Carregar os dados do AsyncStorage quando o componente montar

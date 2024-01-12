@@ -13,6 +13,7 @@ import { useBebidasContext } from "../../src/Context/BebidasContext";
 import { useHigieneContext } from "../../src/Context/HigienePessoalContext";
 import { useHortifrutiContext } from "../../src/Context/HortifrutiContext";
 import { useTemperosContext } from "../../src/Context/TemperosContext";
+import { useAlimentosContext } from "../../src/Context/AlimentosContext";
 
 export default function ModalItem({ handleClose, tipo, addItem }) {
   const { limpeza, setLimpeza } = useLimpezaContext();
@@ -20,6 +21,7 @@ export default function ModalItem({ handleClose, tipo, addItem }) {
   const { higiene, setHigiene } = useHigieneContext();
   const { hortifruti, setHortifruti } = useHortifrutiContext();
   const { temperos, setTemperos } = useTemperosContext();
+  const { alimentos, setAlimentos } = useAlimentosContext();
 
   const [novoItem, setNovoItem] = useState({
     tipo: tipo,
@@ -27,30 +29,6 @@ export default function ModalItem({ handleClose, tipo, addItem }) {
     valor: "",
     quantidade: 1,
   });
-
-  /*   const adicionarItem = () => {
-    const nomeItem = novoItem.produto.trim();
-    const precoItem =
-      novoItem.valor.trim() !== "" ? parseFloat(novoItem.valor) : 0;
-
-    if (nomeItem !== "") {
-      // Crie uma nova lista que contém todos os itens existentes e o novo item
-      const novaLista = [...limpeza, { tipo: tipo, ...novoItem }];
-
-      // Atualize o estado com a nova lista
-      setLimpeza(novaLista);
-
-      // Limpe os campos do novo item
-      setNovoItem({ tipo: tipo, produto: "", valor: "", quantidade: 1 });
-
-      // Feche o modal
-      handleClose();
-    } else {
-      Alert.alert("", "Favor digitar um produto.", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
-    }
-  }; */
 
   const adicionarItem = () => {
     const nomeItem = novoItem.produto.trim();
@@ -69,7 +47,11 @@ export default function ModalItem({ handleClose, tipo, addItem }) {
           : tipo === "Hortifruti"
           ? setHortifruti
           : tipo === "Temperos"
-          ? setTemperos // Adicione mais verificações para outros tipos, se necessário
+          ? setTemperos
+          : tipo === "Carrinho"
+          ? setCarrinho // Adicione mais verificações para outros tipos, se necessário
+          : tipo === "Alimentos"
+          ? setAlimentos
           : null;
 
       if (updateStateFunction) {
@@ -118,7 +100,7 @@ export default function ModalItem({ handleClose, tipo, addItem }) {
               setNovoItem({
                 tipo: novoItem.tipo,
                 produto: novoItem.produto,
-                valor: text,
+                valor: text.replace(",", "."),
                 quantidade: 1,
               })
             }
