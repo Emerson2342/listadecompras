@@ -53,36 +53,6 @@ export default function Limpeza() {
     setLimpeza(novoArray);
   };
 
-  /*  const addAoCarrinho = (index) => {
-    const item = limpeza[index];
-    if (item.valor !== "" && item.valor !== 0) {
-      setCarrinho([...carrinho, item]);
-
-      setNovoItem("", "");
-      Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
-      console.log(carrinho);
-    } else {
-      Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
-    }
-  }; */
-
-  /*   const addAoCarrinho = (index) => {
-    const item = limpeza[index];
-
-    if (item.valor !== "" && item.valor !== 0) {
-      // Criar uma cópia do objeto antes de modificar
-      const itemCarrinho = { ...item, cart: "Carrinho" };
-
-      // Adicionar o objeto modificado ao carrinho
-      setCarrinho([...carrinho, itemCarrinho]);
-
-      setNovoItem("", "");
-      Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
-      console.log(carrinho);
-    } else {
-      Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
-    }
-  }; */
   const addAoCarrinho = (index) => {
     const item = limpeza[index];
 
@@ -200,7 +170,6 @@ export default function Limpeza() {
           />
           <Text>Exclui o produto da lista.</Text>
         </View>
-
         <TouchableOpacity onPress={addItem} style={styles.button}>
           <Text style={styles.buttonText}>Adicionar Novos Itens</Text>
         </TouchableOpacity>
@@ -267,12 +236,12 @@ const styles = StyleSheet.create({
   textProduto: {
     color: "#0045b1",
     top: -10,
-    fontSize: 17,
+    fontSize: 16,
   },
   textPreco: {
     fontWeight: "bold",
     color: "#0099cd",
-    fontSize: 16,
+    fontSize: 17,
   },
   iconContainer: {
     flexDirection: "row",
