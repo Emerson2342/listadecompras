@@ -13,16 +13,23 @@ export const useHortifrutiContext = () => {
 
 export const HortifrutiContextProvider = ({ children }) => {
   const [hortifruti, setHortifruti] = useState([
-    { tipo: "Hortifruti", produto: "Alface Crespo", valor: 0, quantidade: 1 },
-    { tipo: "Hortifruti", produto: "Alface Liso", valor: 0, quantidade: 1 },
-    { tipo: "Hortifruti", produto: "Cenoura", valor: 0, quantidade: 1 },
+    { tipo: "Hortifruti", produto: "Alface Crespa", valor: 2.5, quantidade: 1 },
+    { tipo: "Hortifruti", produto: "Alface Liso", valor: 4.5, quantidade: 1 },
+    { tipo: "Hortifruti", produto: "Cenoura", valor: 9.99, quantidade: 1 },
     { tipo: "Hortifruti", produto: "Couve", valor: 0, quantidade: 1 },
-    { tipo: "Hortifruti", produto: "Couve-Flor", valor: 0, quantidade: 1 },
-    { tipo: "Hortifruti", produto: "Repolho", valor: 0, quantidade: 1 },
+    { tipo: "Hortifruti", produto: "Couve-Flor", valor: 9.99, quantidade: 1 },
+    { tipo: "Hortifruti", produto: "Cheiro-Verde", valor: 1.49, quantidade: 1 },
+    { tipo: "Hortifruti", produto: "Tomate", valor: 3.89, quantidade: 1 },
     { tipo: "Hortifruti", produto: "Pepino", valor: 0, quantidade: 1 },
     { tipo: "Hortifruti", produto: "Cebola", valor: 0, quantidade: 1 },
-    { tipo: "Hortifruti", produto: "Batata", valor: 0, quantidade: 1 },
-    { tipo: "Hortifruti", produto: "Beterraba", valor: 0, quantidade: 1 },
+    { tipo: "Hortifruti", produto: "Batata", valor: 2.99, quantidade: 1 },
+    { tipo: "Hortifruti", produto: "Beterraba", valor: 6.99, quantidade: 1 },
+    {
+      tipo: "Hortifruti",
+      produto: "Pimentão Vermelho",
+      valor: 0,
+      quantidade: 1,
+    },
     { tipo: "Hortifruti", produto: "Pimentão Verde", valor: 0, quantidade: 1 },
     {
       tipo: "Hortifruti",

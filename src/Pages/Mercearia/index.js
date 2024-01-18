@@ -12,16 +12,17 @@ import {
   Image,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import { useHortifrutiContext } from "../../Context/HortifrutiContext";
+import { useMerceariaContext } from "../../Context/MerceariaContext";
 import { useNavigation } from "@react-navigation/native";
 
 import { useCarrinhoContext } from "../../Context/CarrinhoContext";
 
-export default function Hortifruti() {
+export default function Mercearia() {
   const navigation = useNavigation();
 
-  const { hortifruti, setHortifruti } = useHortifrutiContext();
+  const { mercearia, setMercearia } = useMerceariaContext();
   const { carrinho, setCarrinho } = useCarrinhoContext();
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
@@ -46,27 +47,14 @@ export default function Hortifruti() {
 
   const removerItem = (indexToRemove) => {
     // Criar um novo array excluindo o item com o índice indexToRemove
-    const novoArray = hortifruti.filter((_, index) => index !== indexToRemove);
+    const novoArray = mercearia.filter((_, index) => index !== indexToRemove);
 
     // Atualizar o estado com o novo array
-    setHortifruti(novoArray);
+    setMercearia(novoArray);
   };
 
-  /*  const addAoCarrinho = (index) => {
-    const item = hortifruti[index];
-    if (item.valor !== "" && item.valor !== 0) {
-      setCarrinho([...carrinho, item]);
-
-      setNovoItem("", "");
-      Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
-      console.log(carrinho);
-    } else {
-      Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
-    }
-  }; */
-
   const addAoCarrinho = (index) => {
-    const item = hortifruti[index];
+    const item = mercearia[index];
 
     if (item.valor !== "" && item.valor !== 0) {
       // Verificar se o produto já existe no carrinho
@@ -93,14 +81,14 @@ export default function Hortifruti() {
   };
 
   const confirmar = (indexToRemove) => {
-    Alert.alert("", "Deseja apagar o item da hortifruti?", [
+    Alert.alert("", "Deseja apagar o item da mercearia?", [
       { text: "Não", onPress: () => console.log("Cancelado Exclusão") },
       { text: "Sim", onPress: () => removerItem(indexToRemove) },
     ]);
   };
 
   const renderItem = ({ item, index }) => (
-    <View style={styles.hortifrutiContainer}>
+    <View style={styles.merceariaContainer}>
       <View style={styles.produtoContainer}>
         <Text style={styles.textProduto}>
           {index + 1} - {item.produto}
@@ -148,7 +136,7 @@ export default function Hortifruti() {
       <View style={styles.imgCarrinho}></View>
       <View style={styles.container}>
         <FlatList
-          data={hortifruti}
+          data={mercearia}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2} // Configura o número de colunas
@@ -201,8 +189,8 @@ export default function Hortifruti() {
       <Modal visible={modalVisibleAdd} animationType="fade" transparent={true}>
         <ModalItem
           handleClose={() => setModalVisibleAdd(false)}
-          tipo="Hortifruti"
-          addItem={setHortifruti}
+          tipo="Mercearia"
+          addItem={setMercearia}
         />
       </Modal>
 
@@ -213,7 +201,7 @@ export default function Hortifruti() {
       >
         <ModalValor
           handleClose={() => setModalVisibleValor(false)}
-          tipo="Hortifruti"
+          tipo="Mercearia"
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
@@ -232,7 +220,7 @@ const styles = StyleSheet.create({
     borderColor: "#9932CC",
     borderWidth: 1,
   },
-  hortifrutiContainer: {
+  merceariaContainer: {
     //backgroundColor: "#f2e6ff",
     borderColor: "#9932CC",
     borderWidth: 1,
@@ -248,12 +236,12 @@ const styles = StyleSheet.create({
   textProduto: {
     color: "#0045b1",
     top: -10,
-    fontSize: 17,
+    fontSize: 16,
   },
   textPreco: {
     fontWeight: "bold",
     color: "#0099cd",
-    fontSize: 16,
+    fontSize: 17,
   },
   iconContainer: {
     flexDirection: "row",

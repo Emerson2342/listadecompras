@@ -12,7 +12,7 @@ import {
   Image,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { useHigieneContext } from "../../Context/HigienePessoalContext";
 import { useNavigation } from "@react-navigation/native";
 
@@ -69,15 +69,24 @@ export default function Higiene() {
     const item = higiene[index];
 
     if (item.valor !== "" && item.valor !== 0) {
-      // Criar uma cópia do objeto antes de modificar
-      const itemCarrinho = { ...item, cart: "Carrinho" };
+      // Verificar se o produto já existe no carrinho
+      const produtoExistente = carrinho.find(
+        (itemCarrinho) => itemCarrinho.produto === item.produto
+      );
 
-      // Adicionar o objeto modificado ao carrinho
-      setCarrinho([...carrinho, itemCarrinho]);
+      if (produtoExistente) {
+        Alert.alert("", "Produto já existe no carrinho", [{ text: "Ok" }]);
+      } else {
+        // Criar uma cópia do objeto antes de modificar
+        const itemCarrinho = { ...item, cart: "Carrinho" };
 
-      setNovoItem("", "");
-      Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
-      console.log(carrinho);
+        // Adicionar o objeto modificado ao carrinho
+        setCarrinho([...carrinho, itemCarrinho]);
+
+        setNovoItem("", "");
+        Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
+        console.log(carrinho);
+      }
     } else {
       Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
     }
@@ -98,7 +107,7 @@ export default function Higiene() {
         </Text>
         <View>
           <Text style={styles.textPreco}>
-            R$ {""}
+            R${""}
             {(item.valor * (1 || 1)).toLocaleString("pt-BR", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -111,20 +120,25 @@ export default function Higiene() {
           style={styles.iconContent}
           onPress={() => addAoCarrinho(index)}
         >
-          <MaterialIcons name="shopping-cart" size={24} color="#613128" />
+          <MaterialIcons name="shopping-cart" size={24} color="#6495ED" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconContent}
           onPress={() => editarValor(index)}
         >
-          <FontAwesome name="dollar" size={20} color="green" />
+          <AntDesign style={{ top: 4 }} name="edit" size={20} color="green" />
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.iconContent}
           onPress={() => confirmar(index)}
         >
-          <MaterialIcons name="close" size={26} color="red" />
+          <MaterialIcons
+            style={{ top: -2 }}
+            name="close"
+            size={26}
+            color="red"
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -140,22 +154,50 @@ export default function Higiene() {
           numColumns={2} // Configura o número de colunas
         />
       </View>
-      <View style={{ top: 10 }}>
+      <View style={styles.infoContainer}>
+        <View style={styles.legendasContainer}>
+          <MaterialIcons
+            style={{ width: "10%", textAlign: "center" }}
+            name="shopping-cart"
+            size={24}
+            color="#6495ED"
+          />
+          <Text>Adiciona o produto ao carrinho.</Text>
+        </View>
+        <View style={styles.legendasContainer}>
+          <AntDesign
+            style={{ width: "10%", textAlign: "center" }}
+            name="edit"
+            size={20}
+            color="green"
+          />
+          <Text>Altera o nome e/ou valor do produto.</Text>
+        </View>
+        <View style={styles.legendasContainer}>
+          <MaterialIcons
+            style={{ width: "10%", textAlign: "center" }}
+            name="close"
+            size={26}
+            color="red"
+          />
+          <Text>Exclui o produto da lista.</Text>
+        </View>
         <TouchableOpacity onPress={addItem} style={styles.button}>
           <Text style={styles.buttonText}>Adicionar Novos Itens</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{ alignItems: "center", top: 10 }}
+          style={styles.button}
           onPress={() => navigation.navigate("Carrinho")}
         >
-          <Image source={require("../../Imagens/carrinho.png")} />
+          <Text style={styles.buttonText}>Itens do Carrinho</Text>
+          <Image
+            style={{ right: -10 }}
+            source={require("../../Imagens/carrinhoPrincipal.png")}
+          />
         </TouchableOpacity>
-
-        {/* <TouchableOpacity onPress={exibirHigiene} style={styles.button}>
-          <Text style={styles.buttonText}>Mostrar Itens</Text>
-        </TouchableOpacity> */}
       </View>
+
       <Modal visible={modalVisibleAdd} animationType="fade" transparent={true}>
         <ModalItem
           handleClose={() => setModalVisibleAdd(false)}
@@ -187,12 +229,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#ffffffff",
     elevation: 17,
-    borderColor: "#000",
+    borderColor: "#9932CC",
     borderWidth: 1,
   },
   higieneContainer: {
     //backgroundColor: "#f2e6ff",
-    borderColor: "#000",
+    borderColor: "#9932CC",
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,
@@ -206,7 +248,7 @@ const styles = StyleSheet.create({
   textProduto: {
     color: "#0045b1",
     top: -10,
-    fontSize: 17,
+    fontSize: 16,
   },
   textPreco: {
     fontWeight: "bold",
@@ -222,13 +264,16 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    marginTop: 10,
+    marginTop: 20,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#8000ff",
+    backgroundColor: "#4B0082",
     borderRadius: 8,
     padding: 15,
+    width: "80%",
     alignSelf: "center",
+    flexDirection: "row",
+    elevation: 30,
   },
   imgCarrinho: {
     position: "absolute",
@@ -241,5 +286,16 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
+  },
+  legendasContainer: {
+    marginVertical: 5,
+    marginLeft: 15,
+    flexDirection: "row",
+    justifyContent: "start",
+  },
+  infoContainer: {
+    position: "absolute",
+    top: 410,
+    width: "100%",
   },
 });

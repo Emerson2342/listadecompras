@@ -12,16 +12,16 @@ import {
   Image,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useAlimentosContext } from "../../Context/AlimentosContext";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import { useAcougueContext } from "../../Context/AcougueContext";
 import { useNavigation } from "@react-navigation/native";
 
 import { useCarrinhoContext } from "../../Context/CarrinhoContext";
 
-export default function Alimentos() {
+export default function Acougue() {
   const navigation = useNavigation();
 
-  const { alimentos, setAlimentos } = useAlimentosContext();
+  const { acougue, setAcougue } = useAcougueContext();
   const { carrinho, setCarrinho } = useCarrinhoContext();
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
@@ -46,14 +46,14 @@ export default function Alimentos() {
 
   const removerItem = (indexToRemove) => {
     // Criar um novo array excluindo o item com o índice indexToRemove
-    const novoArray = alimentos.filter((_, index) => index !== indexToRemove);
+    const novoArray = acougue.filter((_, index) => index !== indexToRemove);
 
     // Atualizar o estado com o novo array
-    setAlimentos(novoArray);
+    setAcougue(novoArray);
   };
 
   /*  const addAoCarrinho = (index) => {
-    const item = alimentos[index];
+    const item = acougue[index];
     if (item.valor !== "" && item.valor !== 0) {
       setCarrinho([...carrinho, item]);
 
@@ -66,46 +66,46 @@ export default function Alimentos() {
   }; */
 
   const addAoCarrinho = (index) => {
-    const item = alimentos[index];
+    const item = acougue[index];
 
     if (item.valor !== "" && item.valor !== 0) {
-      // Criar uma cópia do objeto antes de modificar
-      const itemCarrinho = { ...item, cart: "Carrinho" };
+      // Verificar se o produto já existe no carrinho
+      const produtoExistente = carrinho.find(
+        (itemCarrinho) => itemCarrinho.produto === item.produto
+      );
 
-      // Adicionar o objeto modificado ao carrinho
-      setCarrinho([...carrinho, itemCarrinho]);
+      if (produtoExistente) {
+        Alert.alert("", "Produto já existe no carrinho", [{ text: "Ok" }]);
+      } else {
+        // Criar uma cópia do objeto antes de modificar
+        const itemCarrinho = { ...item, cart: "Carrinho" };
 
-      setNovoItem("", "");
-      Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
-      console.log(carrinho);
+        // Adicionar o objeto modificado ao carrinho
+        setCarrinho([...carrinho, itemCarrinho]);
+
+        setNovoItem("", "");
+        Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
+        console.log(carrinho);
+      }
     } else {
       Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
     }
   };
 
   const confirmar = (indexToRemove) => {
-    Alert.alert("", "Deseja apagar o item da alimentos?", [
+    Alert.alert("", "Deseja apagar o item da acougue?", [
       { text: "Não", onPress: () => console.log("Cancelado Exclusão") },
       { text: "Sim", onPress: () => removerItem(indexToRemove) },
     ]);
   };
 
   const renderItem = ({ item, index }) => (
-    <View style={styles.alimentosContainer}>
+    <View style={styles.acougueContainer}>
       <View style={styles.produtoContainer}>
         <Text style={styles.textProduto}>
           {index + 1} - {item.produto}
         </Text>
         <View>
-          {/*       
-          <Text style={styles.textPreco}>
-            R${" "}
-            {item.valor.toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </Text> */}
-
           <Text style={styles.textPreco}>
             R${""}
             {(item.valor * (1 || 1)).toLocaleString("pt-BR", {
@@ -120,20 +120,25 @@ export default function Alimentos() {
           style={styles.iconContent}
           onPress={() => addAoCarrinho(index)}
         >
-          <MaterialIcons name="shopping-cart" size={24} color="#613128" />
+          <MaterialIcons name="shopping-cart" size={24} color="#6495ED" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.iconContent}
           onPress={() => editarValor(index)}
         >
-          <FontAwesome name="dollar" size={20} color="green" />
+          <AntDesign style={{ top: 4 }} name="edit" size={20} color="green" />
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.iconContent}
           onPress={() => confirmar(index)}
         >
-          <MaterialIcons name="close" size={26} color="red" />
+          <MaterialIcons
+            style={{ top: -2 }}
+            name="close"
+            size={26}
+            color="red"
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -143,33 +148,62 @@ export default function Alimentos() {
       <View style={styles.imgCarrinho}></View>
       <View style={styles.container}>
         <FlatList
-          data={alimentos}
+          data={acougue}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2} // Configura o número de colunas
         />
       </View>
-      <View style={{ top: 10 }}>
+      <View style={styles.infoContainer}>
+        <View style={styles.legendasContainer}>
+          <MaterialIcons
+            style={{ width: "10%", textAlign: "center" }}
+            name="shopping-cart"
+            size={24}
+            color="#6495ED"
+          />
+          <Text>Adiciona o produto ao carrinho.</Text>
+        </View>
+        <View style={styles.legendasContainer}>
+          <AntDesign
+            style={{ width: "10%", textAlign: "center" }}
+            name="edit"
+            size={20}
+            color="green"
+          />
+          <Text>Altera o nome e/ou valor do produto.</Text>
+        </View>
+        <View style={styles.legendasContainer}>
+          <MaterialIcons
+            style={{ width: "10%", textAlign: "center" }}
+            name="close"
+            size={26}
+            color="red"
+          />
+          <Text>Exclui o produto da lista.</Text>
+        </View>
+
         <TouchableOpacity onPress={addItem} style={styles.button}>
           <Text style={styles.buttonText}>Adicionar Novos Itens</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{ alignItems: "center", top: 10 }}
+          style={styles.button}
           onPress={() => navigation.navigate("Carrinho")}
         >
-          <Image source={require("../../Imagens/carrinho.png")} />
+          <Text style={styles.buttonText}>Itens do Carrinho</Text>
+          <Image
+            style={{ right: -10 }}
+            source={require("../../Imagens/carrinhoPrincipal.png")}
+          />
         </TouchableOpacity>
-
-        {/*  <TouchableOpacity onPress={exibirAlimentos} style={styles.button}>
-          <Text style={styles.buttonText}>Mostrar Itens</Text>
-        </TouchableOpacity> */}
       </View>
+
       <Modal visible={modalVisibleAdd} animationType="fade" transparent={true}>
         <ModalItem
           handleClose={() => setModalVisibleAdd(false)}
-          tipo="Alimentos"
-          addItem={setAlimentos}
+          tipo="Acougue"
+          addItem={setAcougue}
         />
       </Modal>
 
@@ -180,7 +214,7 @@ export default function Alimentos() {
       >
         <ModalValor
           handleClose={() => setModalVisibleValor(false)}
-          tipo="Alimentos"
+          tipo="Acougue"
           indexDoItemAEditar={indexDoItemAEditar}
         />
       </Modal>
@@ -196,12 +230,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#ffffffff",
     elevation: 17,
-    borderColor: "#000",
+    borderColor: "#9932CC",
     borderWidth: 1,
   },
-  alimentosContainer: {
+  acougueContainer: {
     //backgroundColor: "#f2e6ff",
-    borderColor: "#000",
+    borderColor: "#9932CC",
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,
@@ -215,7 +249,7 @@ const styles = StyleSheet.create({
   textProduto: {
     color: "#0045b1",
     top: -10,
-    fontSize: 17,
+    fontSize: 16,
   },
   textPreco: {
     fontWeight: "bold",
@@ -231,13 +265,16 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    marginTop: 10,
+    marginTop: 20,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#8000ff",
+    backgroundColor: "#4B0082",
     borderRadius: 8,
     padding: 15,
+    width: "80%",
     alignSelf: "center",
+    flexDirection: "row",
+    elevation: 9,
   },
   imgCarrinho: {
     position: "absolute",
@@ -250,5 +287,16 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
+  },
+  legendasContainer: {
+    marginVertical: 5,
+    marginLeft: 15,
+    flexDirection: "row",
+    justifyContent: "start",
+  },
+  infoContainer: {
+    position: "absolute",
+    top: 410,
+    width: "100%",
   },
 });

@@ -21,9 +21,8 @@
     "production": {}
   },
   "expo": {
-    "name": "SeuApp",
+    "name": "listadecompras",
     "version": "1.0.0",
-    "sdkVersion": "47.0.0", 
     "extra": {
       "eas": {
         "projectId": "3bc58fbe-d23d-47cd-9605-7596fb5912b4"

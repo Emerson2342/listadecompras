@@ -16,42 +16,60 @@ export const HigieneContextProvider = ({ children }) => {
     {
       tipo: "Higiene Pessoal",
       produto: "Creme Dental",
-      valor: 0,
+      valor: 5.99,
       quantidade: 1,
     },
     {
       tipo: "Higiene Pessoal",
       produto: "Papel Higiênico",
-      valor: 0,
+      valor: 9.8,
       quantidade: 1,
     },
     {
       tipo: "Higiene Pessoal",
       produto: "Escova de Dente",
-      valor: 0,
+      valor: 4.9,
       quantidade: 1,
     },
-    { tipo: "Higiene Pessoal", produto: "Sabonete", valor: 0, quantidade: 1 },
+    {
+      tipo: "Higiene PEssoal",
+      produto: "Sabonete",
+      valor: 2.99,
+      quantidade: 1,
+      cart: false,
+    },
     {
       tipo: "Higiene Pessoal",
       produto: "Bucha de Banho",
-      valor: 0,
+      valor: 4.99,
       quantidade: 1,
     },
     { tipo: "Higiene Pessoal", produto: "Shampoo", valor: 0, quantidade: 1 },
     {
       tipo: "Higiene Pessoal",
       produto: "Condicionador",
-      valor: 0,
+      valor: 13.0,
       quantidade: 1,
     },
     {
       tipo: "Higiene Pessoal",
-      produto: "Creme de pele",
-      valor: 0,
+      produto: "Desodorante",
+      valor: 9.9,
       quantidade: 1,
     },
-    { tipo: "Higiene Pessoal", produto: "Absorvente", valor: 0, quantidade: 1 },
+
+    {
+      tipo: "Higiene Pessoal",
+      produto: "Creme de pele",
+      valor: 9.99,
+      quantidade: 1,
+    },
+    {
+      tipo: "Higiene Pessoal",
+      produto: "Absorvente",
+      valor: 12.9,
+      quantidade: 1,
+    },
   ]);
 
   // Carregar os dados do AsyncStorage quando o componente montar

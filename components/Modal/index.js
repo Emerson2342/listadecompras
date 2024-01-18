@@ -13,7 +13,8 @@ import { useBebidasContext } from "../../src/Context/BebidasContext";
 import { useHigieneContext } from "../../src/Context/HigienePessoalContext";
 import { useHortifrutiContext } from "../../src/Context/HortifrutiContext";
 import { useTemperosContext } from "../../src/Context/TemperosContext";
-import { useAlimentosContext } from "../../src/Context/AlimentosContext";
+import { useMerceariaContext } from "../../src/Context/MerceariaContext";
+import { useAcougueContext } from "../../src/Context/AcougueContext";
 
 export default function ModalItem({ handleClose, tipo, addItem }) {
   const { limpeza, setLimpeza } = useLimpezaContext();
@@ -21,16 +22,18 @@ export default function ModalItem({ handleClose, tipo, addItem }) {
   const { higiene, setHigiene } = useHigieneContext();
   const { hortifruti, setHortifruti } = useHortifrutiContext();
   const { temperos, setTemperos } = useTemperosContext();
-  const { alimentos, setAlimentos } = useAlimentosContext();
+  const { mercearia, setMercearia } = useMerceariaContext();
+  const { acougue, setAcougue } = useAcougueContext();
 
   const [novoItem, setNovoItem] = useState({
     tipo: tipo,
     produto: "",
     valor: "",
     quantidade: 1,
+    cart: false,
   });
 
-  const adicionarItem = () => {
+  /* const adicionarItem = () => {
     const nomeItem = novoItem.produto.trim();
     const precoItem =
       novoItem.valor.trim() !== "" ? parseFloat(novoItem.valor) : 0;
@@ -50,8 +53,10 @@ export default function ModalItem({ handleClose, tipo, addItem }) {
           ? setTemperos
           : tipo === "Carrinho"
           ? setCarrinho // Adicione mais verificações para outros tipos, se necessário
-          : tipo === "Alimentos"
-          ? setAlimentos
+          : tipo === "Mercearia"
+          ? setMercearia
+          : tipo === "Acougue"
+          ? setAcougue
           : null;
 
       if (updateStateFunction) {
@@ -73,6 +78,76 @@ export default function ModalItem({ handleClose, tipo, addItem }) {
       ]);
     }
   };
+ */
+  const adicionarItem = () => {
+    const nomeItem = novoItem.produto.trim();
+    const precoItem =
+      novoItem.valor.trim() !== "" ? parseFloat(novoItem.valor) : 0;
+
+    if (nomeItem !== "") {
+      // Verificar se o produto já existe em alguma lista
+      const produtoExistente = [
+        ...limpeza,
+        ...bebidas,
+        ...higiene,
+        ...hortifruti,
+        ...acougue,
+        ...mercearia,
+        ...temperos,
+        // Adicione outras listas conforme necessário
+      ].find((item) => item.produto === nomeItem);
+
+      if (produtoExistente) {
+        Alert.alert("", "Produto já cadastrado", [
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]);
+      } else {
+        // Determine qual função de atualização do estado usar com base no tipo
+        const updateStateFunction =
+          tipo === "Limpeza"
+            ? setLimpeza
+            : tipo === "Bebidas"
+            ? setBebidas
+            : tipo === "Higiene"
+            ? setHigiene
+            : tipo === "Hortifruti"
+            ? setHortifruti
+            : tipo === "Temperos"
+            ? setTemperos
+            : tipo === "Carrinho"
+            ? setCarrinho
+            : tipo === "Mercearia"
+            ? setMercearia
+            : tipo === "Acougue"
+            ? setAcougue
+            : null;
+
+        if (updateStateFunction) {
+          // Se a função de atualização do estado for válida, faça a atualização
+          updateStateFunction((prevLista) => [
+            ...prevLista,
+            { tipo: tipo, ...novoItem },
+          ]);
+        }
+
+        // Limpe os campos do novo item
+        setNovoItem({
+          tipo: tipo,
+          produto: "",
+          valor: "",
+          quantidade: 1,
+          cart: false,
+        });
+
+        // Feche o modal
+        handleClose();
+      }
+    } else {
+      Alert.alert("", "Favor digitar um produto.", [
+        { text: "OK", onPress: () => console.log("OK Pressed") },
+      ]);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -87,6 +162,7 @@ export default function ModalItem({ handleClose, tipo, addItem }) {
               produto: text,
               valor: novoItem.valor,
               quantidade: 1,
+              cart: false,
             })
           }
         />
@@ -102,6 +178,7 @@ export default function ModalItem({ handleClose, tipo, addItem }) {
                 produto: novoItem.produto,
                 valor: text.replace(",", "."),
                 quantidade: 1,
+                cart: false,
               })
             }
           />
@@ -162,7 +239,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   buttonSave: {
-    backgroundColor: "#8000ff",
+    backgroundColor: "#9932CC",
     borderRadius: 8,
   },
   buttonSaveText: {

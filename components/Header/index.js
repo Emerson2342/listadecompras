@@ -6,7 +6,7 @@ export default function Header() {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#8000ff",
-    paddingTop: 80,
+    backgroundColor: "#4B0082",
+    paddingTop: 10,
   },
 });

@@ -14,7 +14,8 @@ import { useHigieneContext } from "../../src/Context/HigienePessoalContext";
 import { useHortifrutiContext } from "../../src/Context/HortifrutiContext";
 import { useTemperosContext } from "../../src/Context/TemperosContext";
 import { useCarrinhoContext } from "../../src/Context/CarrinhoContext";
-import { useAlimentosContext } from "../../src/Context/AlimentosContext";
+import { useMerceariaContext } from "../../src/Context/MerceariaContext";
+import { useAcougueContext } from "../../src/Context/AcougueContext";
 
 export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
   const { limpeza, setLimpeza } = useLimpezaContext();
@@ -23,13 +24,15 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
   const { hortifruti, setHortifruti } = useHortifrutiContext();
   const { temperos, setTemperos } = useTemperosContext();
   const { carrinho, setCarrinho } = useCarrinhoContext();
-  const { alimentos, setAlimentos } = useAlimentosContext();
+  const { mercearia, setMercearia } = useMerceariaContext();
+  const { acougue, setAcougue } = useAcougueContext();
 
   const [novoItem, setNovoItem] = useState({
     tipo: tipo,
     produto: "",
     valor: "",
     quantidade: 1,
+    cart: false,
   });
 
   /* useEffect(() => {
@@ -86,8 +89,10 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
           ? temperos[indexDoItemAEditar]
           : tipo === "Carrinho"
           ? carrinho[indexDoItemAEditar] // Adicione mais verificações para outros tipos, se necessário
-          : tipo === "Alimentos"
-          ? alimentos[indexDoItemAEditar]
+          : tipo === "Mercearia"
+          ? mercearia[indexDoItemAEditar]
+          : tipo === "Acougue"
+          ? acougue[indexDoItemAEditar]
           : null;
 
       if (itemAEditar) {
@@ -103,15 +108,21 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
     hortifruti,
     temperos,
     carrinho,
-    alimentos,
+    mercearia,
+    acougue,
     tipo,
   ]);
 
-  const alterarValor = () => {
-    const novoValor =
-      novoItem.valor.trim() !== "" ? parseFloat(novoItem.valor) : 0;
+  const alterarProduto = () => {
+    /* const novoValor =
+      novoItem.valor.trim() !== "" ? parseFloat(novoItem.valor) : 0; */
 
-    if (!isNaN(novoValor)) {
+    const novoProduto =
+      novoItem.valor && novoItem.valor.trim() !== ""
+        ? parseFloat(novoItem.valor)
+        : 0;
+
+    if (!isNaN(novoProduto) && novoItem.produto.trim() !== "") {
       // Crie uma cópia da lista correspondente ao tipo
       const novaLista =
         tipo === "Limpeza"
@@ -126,8 +137,10 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
           ? [...temperos]
           : tipo === "Carrinho"
           ? [...carrinho] // Adicione mais verificações para outros tipos, se necessário
-          : tipo === "Alimentos"
-          ? [...alimentos]
+          : tipo === "Mercearia"
+          ? [...mercearia]
+          : tipo === "Acougue"
+          ? [...acougue]
           : [];
 
       // Atualize o valor do item específico na cópia da lista
@@ -146,8 +159,10 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
         setTemperos(novaLista);
       } else if (tipo === "Carrinho") {
         setCarrinho(novaLista);
-      } else if (tipo === "Alimentos") {
-        setAlimentos(novaLista);
+      } else if (tipo === "Mercearia") {
+        setMercearia(novaLista);
+      } else if (tipo == "Acougue") {
+        setAcougue(novaLista);
       }
       // Adicione mais blocos else if para outros tipos, se necessário
 
@@ -157,6 +172,7 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
         produto: "",
         valor: "",
         quantidade: 1,
+        cart: false,
       });
 
       // Feche o modal
@@ -171,6 +187,18 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
+        <View style={styles.precoInputer}>
+          <TextInput
+            style={styles.input}
+            value={novoItem.produto}
+            onChangeText={(text) =>
+              setNovoItem({
+                ...novoItem,
+                produto: text,
+              })
+            }
+          />
+        </View>
         <View style={styles.precoInputer}>
           <Text style={styles.cifra}>R$</Text>
           <TextInput
@@ -192,7 +220,7 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.buttonSave]}
-            onPress={alterarValor}
+            onPress={alterarProduto}
           >
             <Text style={styles.buttonSaveText}>Salvar Item</Text>
           </TouchableOpacity>
@@ -241,7 +269,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   buttonSave: {
-    backgroundColor: "#8000ff",
+    backgroundColor: "#9932CC",
     borderRadius: 8,
   },
   buttonSaveText: {

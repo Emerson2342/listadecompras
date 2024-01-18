@@ -11,7 +11,6 @@ import {
 
 import ModalValor from "../../../components/Modal/modalValor";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useCarrinhoContext } from "../../Context/CarrinhoContext";
 
@@ -125,7 +124,7 @@ export default function Carrinho() {
           <View>
             <Text style={styles.textUnidade}>
               R$
-              {(item.valor * 1 || 1).toLocaleString("pt-BR", {
+              {(item.valor * 1 || 0).toLocaleString("pt-BR", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -147,7 +146,7 @@ export default function Carrinho() {
             style={{ alignSelf: "center" }}
             onPress={() => editarValor(index)}
           >
-            <FontAwesome name="dollar" size={20} color="green" />
+            <AntDesign name="edit" size={20} color="green" />
           </TouchableOpacity>
         </View>
 
@@ -250,12 +249,12 @@ const styles = StyleSheet.create({
     maxHeight: 400,
     backgroundColor: "#ffffffff",
     elevation: 17,
-    borderColor: "#000",
+    borderColor: "#9932CC",
     borderWidth: 1,
   },
   listaContainer: {
     height: 80,
-    borderColor: "#000",
+    borderColor: "#9932CC",
     borderWidth: 1,
     overflow: "hidden",
     borderRadius: 5,
@@ -291,7 +290,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#8000ff",
+    backgroundColor: "#4B0082",
     borderRadius: 8,
     padding: 15,
     alignSelf: "center",

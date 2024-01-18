@@ -13,12 +13,41 @@ export const useBebidasContext = () => {
 
 export const BebidasContextProvider = ({ children }) => {
   const [bebidas, setBebidas] = useState([
-    { tipo: "Bebidas", produto: "Leite", valor: 0, quantidade: 1 },
-    { tipo: "Bebidas", produto: "Café", valor: 0, quantidade: 1 },
-    { tipo: "Bebidas", produto: "Água Mineral", valor: 0, quantidade: 1 },
-    { tipo: "Bebidas", produto: "Energético", valor: 0, quantidade: 1 },
-    { tipo: "Bebidas", produto: "Cerveja", valor: 0, quantidade: 1 },
-    { tipo: "Bebidas", produto: "Refrigerantes", valor: 0, quantidade: 1 },
+    {
+      tipo: "Bebidas",
+      produto: "Água Mineral",
+      valor: 1.99,
+      quantidade: 1,
+      cart: false,
+    },
+    {
+      tipo: "Bebidas",
+      produto: "Energético",
+      valor: 9.8,
+      quantidade: 1,
+      cart: false,
+    },
+    {
+      tipo: "Bebidas",
+      produto: "Cerveja Lata",
+      valor: 2.69,
+      quantidade: 1,
+      cart: false,
+    },
+    {
+      tipo: "Bebidas",
+      produto: "Coca-Cola 2L",
+      valor: 8.0,
+      quantidade: 1,
+      cart: false,
+    },
+    {
+      tipo: "Bebidas",
+      produto: "Coca-Cola Latinha",
+      valor: 3.99,
+      quantidade: 1,
+      cart: false,
+    },
   ]);
 
   // Carregar os dados do AsyncStorage quando o componente montar

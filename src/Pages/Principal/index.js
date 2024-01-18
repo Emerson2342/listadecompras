@@ -9,7 +9,6 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const data = [
   { id: "1", category: "Limpeza" },
@@ -17,7 +16,8 @@ const data = [
   { id: "3", category: "Higiene Pessoal" },
   { id: "4", category: "Hortifruti" },
   { id: "5", category: "Temperos" },
-  { id: "6", category: "Alimentos" },
+  { id: "6", category: "Mercearia" },
+  { id: "7", category: "Açougue" },
   // Adicione mais itens conforme necessário
 ];
 
@@ -27,7 +27,8 @@ const imageMapping = {
   "Higiene Pessoal": require("../../Imagens/higienePessoal.jpg"),
   Hortifruti: require("../../Imagens/hortifruti.jpg"),
   Temperos: require("../../Imagens/temperos.jpg"),
-  Alimentos: require("../../Imagens/alimentos.jpg"),
+  Mercearia: require("../../Imagens/mercearia.jpg"),
+  Açougue: require("../../Imagens/acougue.jpg"),
 };
 
 export default function Principal() {
@@ -63,7 +64,7 @@ export default function Principal() {
         style={styles.button}
         onPress={() => navigation.navigate("Carrinho")}
       >
-        <Text style={styles.buttonText}>Carrinho</Text>
+        <Text style={styles.buttonText}>Itens do Carrinho</Text>
         <Image
           style={{ right: -10 }}
           source={require("../../Imagens/carrinhoPrincipal.png")}
@@ -97,14 +98,14 @@ const styles = StyleSheet.create({
     width: 169,
     borderRadius: 7,
     overflow: "hidden",
-    borderColor: "#8000ff",
+    borderColor: "#9932CC",
     borderWidth: 3,
   },
   button: {
     marginTop: -150,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#8000ff",
+    backgroundColor: "#4B0082",
     borderRadius: 8,
     padding: 15,
     width: "80%",
