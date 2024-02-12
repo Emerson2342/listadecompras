@@ -9,28 +9,41 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import ModalValor from "../../../components/Modal/modalValor";
+import ModalEditarNome from "../../../components/Modal/modalEditarNome";
+import ModalEditarValor from "../../../components/Modal/modalEditarValor";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useCarrinhoContext } from "../../Context/CarrinhoContext";
 
 export default function Carrinho() {
   const { carrinho, setCarrinho } = useCarrinhoContext();
+  const [limpeza, setLimpeza] = useState([
+    {
+      tipo: "Limpeza",
+      produto: "Água Sanitária",
+      valor: 3.49,
+      quantidade: 1,
+      cart: false,
+    },
+    {
+      tipo: "Limpeza",
+      produto: "Sabão em pó",
+      valor: 7.99,
+      quantidade: 1,
+      cart: false,
+    },
+  ]);
 
+  const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
 
   const [total, setTotal] = useState(0);
 
-  const exibirCarrinho = () => {
-    const mensagem = carrinho
-      .map((item, index) => {
-        return `Produto: ${item.produto}\nPreço: R$ ${item.valor}\nQuantidade: ${item.quantidade}\n
------------------------------------------------------------------`;
-      })
-      .join("\n");
 
-    Alert.alert("Informações dos Itens", mensagem);
+  const editarNome = (index) => {
+    setIndexDoItemAEditar(index);
+    setModalVisibleNome(true);
   };
 
   const editarValor = (index) => {
@@ -57,10 +70,10 @@ export default function Carrinho() {
     ]);
   };
 
-  const confirmarApagarCarrinho = (index) => {
+  const confirmarApagarCarrinho = () => {
     Alert.alert("", "Deseja apagar todos os itens do carrinho?", [
       { text: "Não", onPress: () => console.log("Cancelada Exclusão") },
-      { text: "Sim", onPress: () => limparCarrinho() },
+      { text: "Sim", onPress: () => limparCarrinho([]) },
     ]);
   };
 
@@ -108,45 +121,41 @@ export default function Carrinho() {
 
   const renderItem = ({ item, index }) => (
     <View style={styles.listaContainer}>
-      {/* Nome Produto + valor */}
       <View style={styles.superior}>
-        <View style={styles.nomeProduto}>
-          {item.produto && item.produto.trim() !== "" && (
-            <Text style={styles.textLista}>
+        {item.produto && item.produto.trim() !== "" && (
+          <TouchableOpacity
+            style={{ width: "80%" }}
+            onPress={() => editarNome(index)}>
+            <Text style={styles.nomeProduto} numberOfLines={1}>
+              {" "}
               {index + 1} - {item.produto}
             </Text>
-          )}
-        </View>
-        <View style={styles.unidadeProduto}>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity
+          style={styles.unidadeProduto}
+          onPress={() => editarValor(index)}
+        >
           <View>
             <Text style={styles.textUnidade}>Unidade</Text>
           </View>
-          <View>
-            <Text style={styles.textUnidade}>
-              R$
-              {(item.valor * 1 || 0).toLocaleString("pt-BR", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </Text>
-          </View>
-        </View>
+          <Text style={styles.textUnidade}>
+            R$
+            {(item.valor * 1 || 0).toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Apagar produto + quantidade + valor final*/}
       <View style={styles.inferior}>
         <View style={styles.editarProduto}>
           <TouchableOpacity
             style={{ alignSelf: "center" }}
             onPress={() => confirmarApagarItem(index)}
           >
-            <MaterialIcons name="remove-shopping-cart" size={20} color="red" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ alignSelf: "center" }}
-            onPress={() => editarValor(index)}
-          >
-            <AntDesign name="edit" size={20} color="green" />
+            <MaterialIcons name="close" size={30} color="red" />
           </TouchableOpacity>
         </View>
 
@@ -200,11 +209,22 @@ export default function Carrinho() {
         </View>
       </View>
       <Modal
-        visible={modalVisibleValor}
-        animationType="fade"
+        visible={modalVisibleNome}
+        animationType="slide"
         transparent={true}
       >
-        <ModalValor
+        <ModalEditarNome
+          handleClose={() => setModalVisibleNome(false)}
+          tipo={"Carrinho"}
+          indexDoItemAEditar={indexDoItemAEditar}
+        />
+      </Modal>
+      <Modal
+        visible={modalVisibleValor}
+        animationType="slide"
+        transparent={true}
+      >
+        <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
           tipo={"Carrinho"}
           indexDoItemAEditar={indexDoItemAEditar}
@@ -215,14 +235,17 @@ export default function Carrinho() {
 
   return (
     <View>
-      <View style={styles.container}>
-        <FlatList
-          data={carrinho}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={1} // Configura o número de colunas
-        />
-      </View>
+
+      {carrinho.length > 0 ? (
+        <View style={styles.container}>
+          <FlatList
+            data={carrinho}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={1}
+          />
+        </View>) : (<Text style={styles.textVazio}>Carrinho Vazio</Text>)}
+
       <View style={styles.resumo}>
         <View style={styles.resumoContent}>
           <Text style={styles.textText}>TOTAL</Text>
@@ -235,7 +258,10 @@ export default function Carrinho() {
           </Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.button} onPress={confirmarApagarCarrinho}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => confirmarApagarCarrinho()}
+      >
         <Text style={styles.buttonText}>Limpar Carrinho</Text>
       </TouchableOpacity>
     </View>
@@ -273,7 +299,10 @@ const styles = StyleSheet.create({
   textMultiplicar: {
     color: "#123d4e",
     textAlign: "center",
-    fontSize: 25,
+    fontSize: 30,
+    justifyContent: "center",
+    height: 50
+
   },
   textUnidade: {
     color: "#2f6f68",
@@ -286,7 +315,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    top: 540,
+    top: 640,
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
@@ -314,10 +343,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   nomeProduto: {
-    width: "65%",
+    color: "#0045b1",
+    fontSize: 20,
   },
   unidadeProduto: {
-    width: "35%",
+    width: "20%",
     alignItems: "flex-end",
   },
   editarProduto: {
@@ -325,8 +355,6 @@ const styles = StyleSheet.create({
     width: "30%",
     flexDirection: "row",
     justifyContent: "space-evenly",
-
-    //alignSelf: "center",
   },
   quantidade: {
     alignItems: "center",
@@ -342,14 +370,14 @@ const styles = StyleSheet.create({
     width: "30%",
   },
   multiplicar: {
-    width: "40%",
+    width: "30%",
   },
   diminuir: {
     width: "30%",
   },
   resumo: {
     position: "absolute",
-    top: 450,
+    top: 550,
     margin: 10,
     width: "93%",
     flexDirection: "row",
@@ -364,4 +392,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#f47f00",
   },
+  textVazio: {
+    top: 150,
+    width: "80%",
+    alignSelf: "center",
+    textAlign: "center",
+
+    // backgroundColor: "#4B0082",
+    fontSize: 40,
+    fontWeight: "bold",
+    color: "#4B0082",
+  }
 });

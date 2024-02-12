@@ -17,7 +17,11 @@ import { useCarrinhoContext } from "../../src/Context/CarrinhoContext";
 import { useMerceariaContext } from "../../src/Context/MerceariaContext";
 import { useAcougueContext } from "../../src/Context/AcougueContext";
 
-export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
+export default function ModalEditarNome({
+  handleClose,
+  tipo,
+  indexDoItemAEditar,
+}) {
   const { limpeza, setLimpeza } = useLimpezaContext();
   const { bebidas, setBebidas } = useBebidasContext();
   const { higiene, setHigiene } = useHigieneContext();
@@ -32,47 +36,8 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
     produto: "",
     valor: "",
     quantidade: 1,
-    cart: false,
   });
 
-  /* useEffect(() => {
-    // Carregar o valor atual do item a ser editado quando o modal é aberto
-    if (indexDoItemAEditar !== null && indexDoItemAEditar !== undefined) {
-      const itemAEditar = limpeza[indexDoItemAEditar];
-      setNovoItem({ ...itemAEditar });
-    }
-  }, [indexDoItemAEditar, limpeza]);
-
-  const alterarValor = () => {
-    const novoValor =
-      novoItem.valor.trim() !== "" ? parseFloat(novoItem.valor) : 0;
-
-    if (!isNaN(novoValor)) {
-      // Crie uma cópia da lista de limpeza
-      const novaLista = [...limpeza];
-
-      // Atualize o valor do item específico na cópia da lista
-      novaLista[indexDoItemAEditar] = { ...novoItem };
-
-      // Atualize o estado com a nova lista
-      setLimpeza(novaLista);
-
-      // Limpe os campos do novo item
-      setNovoItem({
-        tipo: tipo,
-        produto: "",
-        valor: "",
-        quantidade: 1,
-      });
-
-      // Feche o modal
-      handleClose();
-    } else {
-      Alert.alert("", "Favor digitar um valor válido.", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
-    }
-  }; */
   useEffect(() => {
     // Carregar o valor atual do item a ser editado quando o modal é aberto
     if (indexDoItemAEditar !== null && indexDoItemAEditar !== undefined) {
@@ -80,20 +45,20 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
         tipo === "Limpeza"
           ? limpeza[indexDoItemAEditar]
           : tipo === "Bebidas"
-          ? bebidas[indexDoItemAEditar]
-          : tipo === "Higiene"
-          ? higiene[indexDoItemAEditar]
-          : tipo === "Hortifruti"
-          ? hortifruti[indexDoItemAEditar]
-          : tipo === "Temperos"
-          ? temperos[indexDoItemAEditar]
-          : tipo === "Carrinho"
-          ? carrinho[indexDoItemAEditar] // Adicione mais verificações para outros tipos, se necessário
-          : tipo === "Mercearia"
-          ? mercearia[indexDoItemAEditar]
-          : tipo === "Acougue"
-          ? acougue[indexDoItemAEditar]
-          : null;
+            ? bebidas[indexDoItemAEditar]
+            : tipo === "Higiene"
+              ? higiene[indexDoItemAEditar]
+              : tipo === "Hortifruti"
+                ? hortifruti[indexDoItemAEditar]
+                : tipo === "Temperos"
+                  ? temperos[indexDoItemAEditar]
+                  : tipo === "Carrinho"
+                    ? carrinho[indexDoItemAEditar] // Adicione mais verificações para outros tipos, se necessário
+                    : tipo === "Mercearia"
+                      ? mercearia[indexDoItemAEditar]
+                      : tipo === "Acougue"
+                        ? acougue[indexDoItemAEditar]
+                        : null;
 
       if (itemAEditar) {
         setNovoItem({ ...itemAEditar });
@@ -114,13 +79,7 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
   ]);
 
   const alterarProduto = () => {
-    /* const novoValor =
-      novoItem.valor.trim() !== "" ? parseFloat(novoItem.valor) : 0; */
-
-    const novoProduto =
-      novoItem.valor && novoItem.valor.trim() !== ""
-        ? parseFloat(novoItem.valor)
-        : 0;
+    const novoProduto = novoItem.valor;
 
     if (!isNaN(novoProduto) && novoItem.produto.trim() !== "") {
       // Crie uma cópia da lista correspondente ao tipo
@@ -128,20 +87,20 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
         tipo === "Limpeza"
           ? [...limpeza]
           : tipo === "Bebidas"
-          ? [...bebidas]
-          : tipo === "Higiene"
-          ? [...higiene]
-          : tipo === "Hortifruti"
-          ? [...hortifruti]
-          : tipo === "Temperos"
-          ? [...temperos]
-          : tipo === "Carrinho"
-          ? [...carrinho] // Adicione mais verificações para outros tipos, se necessário
-          : tipo === "Mercearia"
-          ? [...mercearia]
-          : tipo === "Acougue"
-          ? [...acougue]
-          : [];
+            ? [...bebidas]
+            : tipo === "Higiene"
+              ? [...higiene]
+              : tipo === "Hortifruti"
+                ? [...hortifruti]
+                : tipo === "Temperos"
+                  ? [...temperos]
+                  : tipo === "Carrinho"
+                    ? [...carrinho]
+                    : tipo === "Mercearia"
+                      ? [...mercearia]
+                      : tipo === "Acougue"
+                        ? [...acougue]
+                        : [];
 
       // Atualize o valor do item específico na cópia da lista
       novaLista[indexDoItemAEditar] = { ...novoItem };
@@ -187,6 +146,7 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
+        <Text style={styles.titulo}>Digite o novo nome do produto</Text>
         <View style={styles.precoInputer}>
           <TextInput
             style={styles.input}
@@ -199,30 +159,16 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
             }
           />
         </View>
-        <View style={styles.precoInputer}>
-          <Text style={styles.cifra}>R$</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Digite o novo valor"
-            value={novoItem.valor ? novoItem.valor.toString() : ""}
-            onChangeText={(text) =>
-              setNovoItem({
-                ...novoItem,
-                valor: text.replace(",", "."),
-              })
-            }
-          />
-        </View>
 
         <View style={styles.buttonArea}>
           <TouchableOpacity style={styles.button} onPress={handleClose}>
-            <Text style={styles.buttonText}>Voltar</Text>
+            <Text style={{ color: "#4B0082", fontWeight: "bold" }}>Voltar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.buttonSave]}
             onPress={alterarProduto}
           >
-            <Text style={styles.buttonSaveText}>Salvar Item</Text>
+            <Text style={styles.buttonSaveText}>Alterar nome</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -232,7 +178,7 @@ export default function ModalItem({ handleClose, tipo, indexDoItemAEditar }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(24,24,24,0.6)",
+    backgroundColor: "rgba(24,24,24,0.8)",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -244,32 +190,50 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     alignItems: "center",
     borderRadius: 8,
+    borderWidth: 3,
+    borderColor: "rgb(75, 0, 130)",
   },
   input: {
     fontSize: 20,
+    textAlign: "center",
+    width: "100%",
+    color: "#0045b1",
   },
   precoInputer: {
+    width: "85%",
+    height: 40,
     flexDirection: "row",
+    borderWidth: 1,
+    borderRadius: 8,
+    borderBlockColor: "#4B0082",
+    elevation: 15,
+    backgroundColor: "#fff",
   },
-  cifra: {
+  titulo: {
     fontSize: 20,
+    marginBottom: 15,
+    color: "#4b0082",
   },
   buttonArea: {
     flexDirection: "row",
     width: "85%",
     marginTop: 8,
-    //alignItems: "center",
     justifyContent: "space-between",
   },
   button: {
-    flex: 1,
     alignItems: "center",
     marginTop: 14,
     marginBottom: 14,
     padding: 8,
+    borderWidth: 1,
+    borderRadius: 7,
+    borderBlockColor: "#4B0082",
+    width: "45%",
+    elevation: 20,
+    backgroundColor: "#fff",
   },
   buttonSave: {
-    backgroundColor: "#9932CC",
+    backgroundColor: "#4B0082",
     borderRadius: 8,
   },
   buttonSaveText: {

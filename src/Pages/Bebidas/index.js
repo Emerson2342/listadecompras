@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import ModalItem from "../../../components/Modal";
-import ModalValor from "../../../components/Modal/modalValor";
+import ModalAdicionar from "../../../components/Modal/modalAdicionar";
+import ModalEditarNome from "../../../components/Modal/modalEditarNome";
+import ModalEditarValor from "../../../components/Modal/modalEditarValor";
 import {
   View,
   Text,
@@ -12,7 +13,6 @@ import {
   Image,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import AntDesign from "react-native-vector-icons/AntDesign";
 import { useBebidasContext } from "../../Context/BebidasContext";
 import { useNavigation } from "@react-navigation/native";
 
@@ -25,8 +25,10 @@ export default function Bebidas() {
   const { carrinho, setCarrinho } = useCarrinhoContext();
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
+  const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
+  const [columns, setColumns] = useState(1);
 
   const [novoItem, setNovoItem] = useState({
     produto: "",
@@ -37,6 +39,10 @@ export default function Bebidas() {
 
   const addItem = () => {
     setModalVisibleAdd(true);
+  };
+  const editarNome = (index) => {
+    setIndexDoItemAEditar(index);
+    setModalVisibleNome(true);
   };
 
   const editarValor = (index) => {
@@ -51,19 +57,6 @@ export default function Bebidas() {
     // Atualizar o estado com o novo array
     setBebidas(novoArray);
   };
-
-  /*  const addAoCarrinho = (index) => {
-    const item = bebidas[index];
-    if (item.valor !== "" && item.valor !== 0) {
-      setCarrinho([...carrinho, item]);
-
-      setNovoItem("", "");
-      Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
-      console.log(carrinho);
-    } else {
-      Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
-    }
-  }; */
 
   const addAoCarrinho = (index) => {
     const item = bebidas[index];
@@ -102,18 +95,20 @@ export default function Bebidas() {
   const renderItem = ({ item, index }) => (
     <View style={styles.bebidasContainer}>
       <View style={styles.produtoContainer}>
-        <Text style={styles.textProduto}>
-          {index + 1} - {item.produto}
-        </Text>
-        <View>
+        <TouchableOpacity onPress={() => editarNome(index)}>
+          <Text style={styles.textProduto} numberOfLines={1}>
+            {index + 1} - {item.produto}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => editarValor(index)}>
           <Text style={styles.textPreco}>
-            R${""}
+            R${" "}
             {(item.valor * (1 || 1)).toLocaleString("pt-BR", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.iconContainer}>
         <TouchableOpacity
@@ -121,12 +116,6 @@ export default function Bebidas() {
           onPress={() => addAoCarrinho(index)}
         >
           <MaterialIcons name="shopping-cart" size={24} color="#6495ED" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.iconContent}
-          onPress={() => editarValor(index)}
-        >
-          <AntDesign style={{ top: 2 }} name="edit" size={20} color="green" />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -143,6 +132,7 @@ export default function Bebidas() {
       </View>
     </View>
   );
+
   return (
     <View>
       <View style={styles.imgCarrinho}></View>
@@ -155,34 +145,6 @@ export default function Bebidas() {
         />
       </View>
       <View style={styles.infoContainer}>
-        <View style={styles.legendasContainer}>
-          <MaterialIcons
-            style={{ width: "10%", textAlign: "center" }}
-            name="shopping-cart"
-            size={24}
-            color="#6495ED"
-          />
-          <Text>Adiciona o produto ao carrinho.</Text>
-        </View>
-        <View style={styles.legendasContainer}>
-          <AntDesign
-            style={{ width: "10%", textAlign: "center" }}
-            name="edit"
-            size={20}
-            color="green"
-          />
-          <Text>Altera o nome e/ou valor do produto.</Text>
-        </View>
-        <View style={styles.legendasContainer}>
-          <MaterialIcons
-            style={{ width: "10%", textAlign: "center" }}
-            name="close"
-            size={26}
-            color="red"
-          />
-          <Text>Exclui o produto da lista.</Text>
-        </View>
-
         <TouchableOpacity onPress={addItem} style={styles.button}>
           <Text style={styles.buttonText}>Adicionar Novos Itens</Text>
         </TouchableOpacity>
@@ -199,8 +161,8 @@ export default function Bebidas() {
         </TouchableOpacity>
       </View>
 
-      <Modal visible={modalVisibleAdd} animationType="fade" transparent={true}>
-        <ModalItem
+      <Modal visible={modalVisibleAdd} animationType="slide" transparent={true}>
+        <ModalAdicionar
           handleClose={() => setModalVisibleAdd(false)}
           tipo="Bebidas"
           addItem={setBebidas}
@@ -208,11 +170,23 @@ export default function Bebidas() {
       </Modal>
 
       <Modal
-        visible={modalVisibleValor}
-        animationType="fade"
+        visible={modalVisibleNome}
+        animationType="slide"
         transparent={true}
       >
-        <ModalValor
+        <ModalEditarNome
+          handleClose={() => setModalVisibleNome(false)}
+          tipo="Bebidas"
+          indexDoItemAEditar={indexDoItemAEditar}
+        />
+      </Modal>
+
+      <Modal
+        visible={modalVisibleValor}
+        animationType="slide"
+        transparent={true}
+      >
+        <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
           tipo="Bebidas"
           indexDoItemAEditar={indexDoItemAEditar}
@@ -225,7 +199,7 @@ export default function Bebidas() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    maxHeight: 400,
+    maxHeight: 530,
     backgroundColor: "#fafafa",
     alignItems: "center",
     backgroundColor: "#ffffffff",
@@ -234,11 +208,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   bebidasContainer: {
-    //backgroundColor: "#f2e6ff",
     borderColor: "#9932CC",
     borderWidth: 1,
     borderRadius: 5,
-    padding: 10,
     margin: 5,
     marginLeft: 10,
     width: "45%",
@@ -248,20 +220,21 @@ const styles = StyleSheet.create({
 
   textProduto: {
     color: "#0045b1",
-    top: -10,
-    fontSize: 17,
+    fontSize: 16,
+    marginLeft: 3
   },
   textPreco: {
     fontWeight: "bold",
-    color: "#0099cd",
-    fontSize: 16,
+    color: "#4b0",
+    fontSize: 17,
+    marginLeft: 3
   },
   iconContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingLeft: 5,
     paddingRight: 5,
-    bottom: -10,
+
   },
 
   button: {
@@ -274,7 +247,7 @@ const styles = StyleSheet.create({
     width: "80%",
     alignSelf: "center",
     flexDirection: "row",
-    elevation: 30,
+    elevation: 9,
   },
   imgCarrinho: {
     position: "absolute",
@@ -288,15 +261,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  legendasContainer: {
-    marginVertical: 5,
-    marginLeft: 15,
-    flexDirection: "row",
-    justifyContent: "start",
-  },
   infoContainer: {
     position: "absolute",
-    top: 410,
+    top: 530,
     width: "100%",
   },
 });
