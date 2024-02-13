@@ -21,14 +21,14 @@ import { useCarrinhoContext } from "../../Context/CarrinhoContext";
 export default function Temperos() {
   const navigation = useNavigation();
 
-  const { Temperos, setTemperos } = useTemperosContext();
+  const { temperos, setTemperos } = useTemperosContext();
   const { carrinho, setCarrinho } = useCarrinhoContext();
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
-  const [columns, setColumns] = useState(1);
+
 
   const [novoItem, setNovoItem] = useState({
     produto: "",
@@ -52,14 +52,14 @@ export default function Temperos() {
 
   const removerItem = (indexToRemove) => {
     // Criar um novo array excluindo o item com o índice indexToRemove
-    const novoArray = Temperos.filter((_, index) => index !== indexToRemove);
+    const novoArray = temperos.filter((_, index) => index !== indexToRemove);
 
     // Atualizar o estado com o novo array
     setTemperos(novoArray);
   };
 
   const addAoCarrinho = (index) => {
-    const item = Temperos[index];
+    const item = temperos[index];
 
     if (item.valor !== "" && item.valor !== 0) {
       // Verificar se o produto já existe no carrinho
@@ -138,7 +138,7 @@ export default function Temperos() {
       <View style={styles.imgCarrinho}></View>
       <View style={styles.container}>
         <FlatList
-          data={Temperos}
+          data={temperos}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2} // Configura o número de colunas

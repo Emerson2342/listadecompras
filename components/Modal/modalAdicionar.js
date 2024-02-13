@@ -71,20 +71,20 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
           tipo === "Limpeza"
             ? setLimpeza
             : tipo === "Bebidas"
-            ? setBebidas
-            : tipo === "Higiene"
-            ? setHigiene
-            : tipo === "Hortifruti"
-            ? setHortifruti
-            : tipo === "Temperos"
-            ? setTemperos
-            : tipo === "Carrinho"
-            ? setCarrinho
-            : tipo === "Mercearia"
-            ? setMercearia
-            : tipo === "Acougue"
-            ? setAcougue
-            : null;
+              ? setBebidas
+              : tipo === "Higiene"
+                ? setHigiene
+                : tipo === "Hortifruti"
+                  ? setHortifruti
+                  : tipo === "Temperos"
+                    ? setTemperos
+                    : tipo === "Carrinho"
+                      ? setCarrinho
+                      : tipo === "Mercearia"
+                        ? setMercearia
+                        : tipo === "Acougue"
+                          ? setAcougue
+                          : null;
 
         if (updateStateFunction) {
           // Se a função de atualização do estado for válida, faça a atualização
