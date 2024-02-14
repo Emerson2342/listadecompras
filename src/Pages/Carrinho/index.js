@@ -208,28 +208,6 @@ export default function Carrinho() {
           )}
         </View>
       </View>
-      <Modal
-        visible={modalVisibleNome}
-        animationType="slide"
-        transparent={true}
-      >
-        <ModalEditarNome
-          handleClose={() => setModalVisibleNome(false)}
-          tipo={"Carrinho"}
-          indexDoItemAEditar={indexDoItemAEditar}
-        />
-      </Modal>
-      <Modal
-        visible={modalVisibleValor}
-        animationType="slide"
-        transparent={true}
-      >
-        <ModalEditarValor
-          handleClose={() => setModalVisibleValor(false)}
-          tipo={"Carrinho"}
-          indexDoItemAEditar={indexDoItemAEditar}
-        />
-      </Modal>
     </View>
   );
 
@@ -264,6 +242,28 @@ export default function Carrinho() {
       >
         <Text style={styles.buttonText}>Limpar Carrinho</Text>
       </TouchableOpacity>
+      <Modal
+        visible={modalVisibleNome}
+        animationType="slide"
+        transparent={true}
+      >
+        <ModalEditarNome
+          handleClose={() => setModalVisibleNome(false)}
+          tipo={"Carrinho"}
+          indexDoItemAEditar={indexDoItemAEditar}
+        />
+      </Modal>
+      <Modal
+        visible={modalVisibleValor}
+        animationType="slide"
+        transparent={true}
+      >
+        <ModalEditarValor
+          handleClose={() => setModalVisibleValor(false)}
+          tipo={"Carrinho"}
+          indexDoItemAEditar={indexDoItemAEditar}
+        />
+      </Modal>
     </View>
   );
 }
