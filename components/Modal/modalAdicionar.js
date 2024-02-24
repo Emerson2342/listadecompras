@@ -8,24 +8,16 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 
-import { useLimpezaContext } from "../../src/Context/LimpezaContext";
-import { useBebidasContext } from "../../src/Context/BebidasContext";
-import { useHigieneContext } from "../../src/Context/HigienePessoalContext";
-import { useHortifrutiContext } from "../../src/Context/HortifrutiContext";
-import { useTemperosContext } from "../../src/Context/TemperosContext";
-import { useMerceariaContext } from "../../src/Context/MerceariaContext";
-import { useAcougueContext } from "../../src/Context/AcougueContext";
+import { useListaGeralContext } from "../../src/Context/ListaGeralContext";
+import { useIdentificadorContext } from "../../src/Context/IdentificadorContext";
 
-export default function ModalAdicionar({ handleClose, tipo, addItem }) {
-  const { limpeza, setLimpeza } = useLimpezaContext();
-  const { bebidas, setBebidas } = useBebidasContext();
-  const { higiene, setHigiene } = useHigieneContext();
-  const { hortifruti, setHortifruti } = useHortifrutiContext();
-  const { temperos, setTemperos } = useTemperosContext();
-  const { mercearia, setMercearia } = useMerceariaContext();
-  const { acougue, setAcougue } = useAcougueContext();
+export default function ModalAdicionar({ handleClose, tipo }) {
+  const { identificador, setIdentificador, listaGeral, setListaGeral } =
+    useListaGeralContext();
+  // const { identificador, setIdentificador } = useIdentificadorContext();
 
   const [novoItem, setNovoItem] = useState({
+    id: identificador,
     tipo: tipo,
     produto: "",
     valor: "",
@@ -39,17 +31,9 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
       novoItem.valor.trim() !== "" ? parseFloat(novoItem.valor) : 0;
 
     if (nomeItem !== "") {
-      // Verificar se o produto já existe em alguma lista
-      const produtoExistente = [
-        ...limpeza,
-        ...bebidas,
-        ...higiene,
-        ...hortifruti,
-        ...acougue,
-        ...mercearia,
-        ...temperos,
-        // Adicione outras listas conforme necessário
-      ].find((item) => item.produto === nomeItem);
+      const produtoExistente = listaGeral.find(
+        (item) => item.produto === nomeItem
+      );
 
       if (isNaN(precoItem)) {
         Alert.alert("", "Favor digitar um preço válido.", [
@@ -66,44 +50,16 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
           },
         ]);
       } else {
-        // Determine qual função de atualização do estado usar com base no tipo
-        const updateStateFunction =
-          tipo === "Limpeza"
-            ? setLimpeza
-            : tipo === "Bebidas"
-              ? setBebidas
-              : tipo === "Higiene"
-                ? setHigiene
-                : tipo === "Hortifruti"
-                  ? setHortifruti
-                  : tipo === "Temperos"
-                    ? setTemperos
-                    : tipo === "Carrinho"
-                      ? setCarrinho
-                      : tipo === "Mercearia"
-                        ? setMercearia
-                        : tipo === "Acougue"
-                          ? setAcougue
-                          : null;
-
-        if (updateStateFunction) {
-          // Se a função de atualização do estado for válida, faça a atualização
-          updateStateFunction((prevLista) => [
-            ...prevLista,
-            { tipo: tipo, ...novoItem },
-          ]);
-        }
-
-        // Limpe os campos do novo item
+        setListaGeral((prevLista) => [...prevLista, novoItem]);
         setNovoItem({
+          id: identificador,
           tipo: tipo,
           produto: "",
           valor: "",
           quantidade: 1,
           cart: false,
         });
-
-        // Feche o modal
+        setIdentificador(identificador + 1);
         handleClose();
       }
     } else {
@@ -123,6 +79,7 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
             value={novoItem.produto}
             onChangeText={(text) =>
               setNovoItem({
+                id: novoItem.id,
                 tipo: novoItem.tipo,
                 produto: text,
                 valor: novoItem.valor,
@@ -138,9 +95,10 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
           <TextInput
             style={styles.input}
             placeholder="Digite o preço do produto"
-            value={novoItem.valor.toString()} // Converta o numeral para string
+            value={novoItem.valor.toString()}
             onChangeText={(text) =>
               setNovoItem({
+                id: novoItem.id,
                 tipo: novoItem.tipo,
                 produto: novoItem.produto,
                 valor: text.replace(",", "."),
@@ -157,7 +115,7 @@ export default function ModalAdicionar({ handleClose, tipo, addItem }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.buttonSave]}
-            onPress={adicionarItem}
+            onPress={() => adicionarItem()}
           >
             <Text style={styles.buttonSaveText}>Salvar Item</Text>
           </TouchableOpacity>

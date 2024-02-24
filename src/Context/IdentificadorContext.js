@@ -1,26 +1,22 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const CarrinhoContext = createContext();
+const IdentificadorContext = createContext();
 
-//useMyContext
-//MyContext
-//MyContextProvider
-
-export const useCarrinhoContext = () => {
-  return useContext(CarrinhoContext);
+export const useIdentificadorContext = () => {
+  return useContext(IdentificadorContext);
 };
 
-export const CarrinhoContextProvider = ({ children }) => {
-  const [carrinho, setCarrinho] = useState([]);
+export const IdentificadorContextProvider = ({ children }) => {
+  const [identificador, setIdentificador] = useState(100);
 
   // Carregar os dados do AsyncStorage quando o componente montar
   useEffect(() => {
     const loadAsyncData = async () => {
       try {
-        const storedData = await AsyncStorage.getItem("carrinho");
+        const storedData = await AsyncStorage.getItem("identificador");
         if (storedData) {
-          setCarrinho(JSON.parse(storedData));
+          setIdentificador(parseInt(storedData, 10));
         }
       } catch (error) {
         console.error("Erro ao carregar dados do AsyncStorage:", error);
@@ -30,22 +26,22 @@ export const CarrinhoContextProvider = ({ children }) => {
     loadAsyncData();
   }, []);
 
-  // Atualizar o AsyncStorage sempre que a lista for alterada
+  // Atualizar o AsyncStorage sempre que o identificador for alterado
   useEffect(() => {
     const saveAsyncData = async () => {
       try {
-        await AsyncStorage.setItem("carrinho", JSON.stringify(carrinho));
+        await AsyncStorage.setItem("identificador", identificador.toString());
       } catch (error) {
         console.error("Erro ao salvar dados no AsyncStorage:", error);
       }
     };
 
     saveAsyncData();
-  }, [carrinho]);
+  }, [identificador]);
 
   return (
-    <CarrinhoContext.Provider value={{ carrinho, setCarrinho }}>
+    <IdentificadorContext.Provider value={{ identificador, setIdentificador }}>
       {children}
-    </CarrinhoContext.Provider>
+    </IdentificadorContext.Provider>
   );
 };

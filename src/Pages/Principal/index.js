@@ -12,23 +12,23 @@ import { useNavigation } from "@react-navigation/native";
 
 const data = [
   { id: "1", category: "Limpeza" },
-  { id: "2", category: "Bebidas" },
-  { id: "3", category: "Higiene Pessoal" },
-  { id: "4", category: "Hortifruti" },
-  { id: "5", category: "Temperos" },
-  { id: "6", category: "Mercearia" },
-  { id: "7", category: "Açougue" },
+  // { id: "2", category: "Bebidas" },
+  //{ id: "3", category: "Higiene Pessoal" },
+  //{ id: "4", category: "Hortifruti" },
+  //{ id: "5", category: "Temperos" },
+  //{ id: "6", category: "Mercearia" },
+  //{ id: "7", category: "Açougue" },
   // Adicione mais itens conforme necessário
 ];
 
 const imageMapping = {
   Limpeza: require("../../Imagens/limpeza.jpg"),
-  Bebidas: require("../../Imagens/bebidas.jpg"),
-  "Higiene Pessoal": require("../../Imagens/higienePessoal.jpg"),
-  Hortifruti: require("../../Imagens/hortifruti.jpg"),
-  Temperos: require("../../Imagens/temperos.jpg"),
-  Mercearia: require("../../Imagens/mercearia.jpg"),
-  Açougue: require("../../Imagens/acougue.jpg"),
+  //  Bebidas: require("../../Imagens/bebidas.jpg"),
+  // "Higiene Pessoal": require("../../Imagens/higienePessoal.jpg"),
+  //Hortifruti: require("../../Imagens/hortifruti.jpg"),
+  //Temperos: require("../../Imagens/temperos.jpg"),
+  //Mercearia: require("../../Imagens/mercearia.jpg"),
+  //Açougue: require("../../Imagens/acougue.jpg"),
 };
 
 export default function Principal() {

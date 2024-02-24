@@ -13,53 +13,49 @@ import {
   Image,
 } from "react-native";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { useLimpezaContext } from "../../Context/LimpezaContext";
 import { useNavigation } from "@react-navigation/native";
-
-import { useCarrinhoContext } from "../../Context/CarrinhoContext";
+import { useListaGeralContext } from "../../Context/ListaGeralContext";
+import { useIdentificadorContext } from "../../Context/IdentificadorContext";
 
 export default function Limpeza() {
   const navigation = useNavigation();
 
-  const { limpeza, setLimpeza } = useLimpezaContext();
-  const { carrinho, setCarrinho } = useCarrinhoContext();
+  const { identificador, listaGeral, setListaGeral } = useListaGeralContext();
+  // const { identificador } = useIdentificadorContext();
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
-  const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
-  const [columns, setColumns] = useState(1);
 
-  const [novoItem, setNovoItem] = useState({
-    produto: "",
-    valor: "",
-    quantidade: 1,
-    carrinho: false,
-  });
+  const [limpeza, setLimpeza] = useState([]);
+
+  useEffect(() => {
+    // Filtrar objetos com tipo "Limpeza"
+    const listaLimpeza = listaGeral.filter((item) => item.tipo === "Limpeza");
+    setLimpeza(listaLimpeza);
+  }, [listaGeral]);
 
   const addItem = () => {
     setModalVisibleAdd(true);
   };
-  const editarNome = (index) => {
-    setIndexDoItemAEditar(index);
+  const editarNome = () => {
     setModalVisibleNome(true);
   };
 
-  const editarValor = (index) => {
-    setIndexDoItemAEditar(index);
+  const editarValor = () => {
     setModalVisibleValor(true);
   };
 
   const removerItem = (indexToRemove) => {
     // Criar um novo array excluindo o item com o índice indexToRemove
-    const novoArray = limpeza.filter((_, index) => index !== indexToRemove);
+    const novoArray = listaGeral.filter((_, index) => index !== indexToRemove);
 
     // Atualizar o estado com o novo array
-    setLimpeza(novoArray);
+    setListaGeral(novoArray);
   };
 
   const addAoCarrinho = (index) => {
-    const item = limpeza[index];
+    /*     const item = limpeza[index];
 
     if (item.valor !== "" && item.valor !== 0) {
       // Verificar se o produto já existe no carrinho
@@ -82,7 +78,8 @@ export default function Limpeza() {
       }
     } else {
       Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
-    }
+    } */
+    alert("Adicionado ao carrinho");
   };
 
   const confirmar = (indexToRemove) => {
@@ -113,7 +110,8 @@ export default function Limpeza() {
       <View style={styles.iconContainer}>
         <TouchableOpacity
           style={styles.iconContent}
-          onPress={() => addAoCarrinho(index)}
+          //  onPress={() => addAoCarrinho(index)}
+          onPress={() => alert(item.id)}
         >
           <MaterialIcons name="shopping-cart" size={24} color="#6495ED" />
         </TouchableOpacity>
@@ -140,18 +138,24 @@ export default function Limpeza() {
         <FlatList
           data={limpeza}
           renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={2} // Configura o número de colunas
+          keyExtractor={(item) => item.id.toString()}
+          // keyExtractor={(item, index) => index.toString()}
+          numColumns={2}
+          initialNumToRender={10} // Ajuste conforme necessário
+          maxToRenderPerBatch={5}
         />
       </View>
       <View style={styles.infoContainer}>
-        <TouchableOpacity onPress={addItem} style={styles.button}>
+        <TouchableOpacity onPress={() => addItem()} style={styles.button}>
           <Text style={styles.buttonText}>Adicionar Novos Itens</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("Carrinho")}
+          // onPress={() => navigation.navigate("Carrinho")}
+
+          onLongPress={() => alert(JSON.stringify(listaGeral, null, 2))}
+          onPress={() => alert(identificador)}
         >
           <Text style={styles.buttonText}>Itens do Carrinho</Text>
           <Image
@@ -164,8 +168,7 @@ export default function Limpeza() {
       <Modal visible={modalVisibleAdd} animationType="slide" transparent={true}>
         <ModalAdicionar
           handleClose={() => setModalVisibleAdd(false)}
-          tipo="Limpeza"
-          addItem={setLimpeza}
+          tipo={"Limpeza"}
         />
       </Modal>
 
@@ -174,23 +177,15 @@ export default function Limpeza() {
         animationType="slide"
         transparent={true}
       >
-        <ModalEditarNome
-          handleClose={() => setModalVisibleNome(false)}
-          tipo="Limpeza"
-          indexDoItemAEditar={indexDoItemAEditar}
-        />
+        <ModalEditarNome handleClose={() => setModalVisibleNome(false)} />
       </Modal>
 
       <Modal
         visible={modalVisibleValor}
         animationType="slide"
-        transparent={true}
+        //transparent={true}
       >
-        <ModalEditarValor
-          handleClose={() => setModalVisibleValor(false)}
-          tipo="Limpeza"
-          indexDoItemAEditar={indexDoItemAEditar}
-        />
+        <ModalEditarValor handleClose={() => setModalVisibleValor(false)} />
       </Modal>
     </View>
   );
@@ -199,7 +194,7 @@ export default function Limpeza() {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    maxHeight: 530,
+    height: 530,
     backgroundColor: "#fafafa",
     alignItems: "center",
     backgroundColor: "#ffffffff",
@@ -216,26 +211,24 @@ const styles = StyleSheet.create({
     width: "45%",
     elevation: 30,
     backgroundColor: "#ffffff",
-
   },
 
   textProduto: {
     color: "#0045b1",
     fontSize: 16,
-    marginLeft: 3
+    marginLeft: 3,
   },
   textPreco: {
     fontWeight: "bold",
     color: "#4b0",
     fontSize: 17,
-    marginLeft: 3
+    marginLeft: 3,
   },
   iconContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingLeft: 5,
     paddingRight: 5,
-
   },
 
   button: {
