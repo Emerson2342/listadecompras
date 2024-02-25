@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import ModalEditarNome from "../../../components/Modal/modalEditarNome";
-import ModalEditarValor from "../../../components/Modal/modalEditarValor";
-import ModalDeletarItem from "../../../components/Modal/modalDeletarItem";
+import ModalEditarNome from "../../../components/Modal/EditarNome";
+import ModalEditarValor from "../../../components/Modal/EditarValor";
+import ModalProdutoRemovidoCarrinho from "../../../components/Modal/ProdutoRemovidoCarrinho";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
@@ -22,7 +22,7 @@ export default function Carrinho() {
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(0);
-  const [deletarItemVisible, setDeletarItemVisible] = useState(false);
+  const [modalProdutoRemovido, setModalProdutoRemovido] = useState(false);
 
   const [carrinho, setCarrinho] = useState([]);
   const [total, setTotal] = useState(0);
@@ -42,18 +42,23 @@ export default function Carrinho() {
     setModalVisibleValor(true);
   };
 
-  const handleConfirm = (item) => {
-    setItemToEdit(item);
-    setDeletarItemVisible(true);
-  };
-
   const removerItem = (id) => {
     setListaGeral((listaAntiga) => {
       return listaAntiga.map((item) => {
         if (item && item.id === id) {
+          setModalProdutoRemovido(true);
           return { ...item, cart: false };
         }
         return item;
+      });
+    });
+  };
+
+  const limparLista = () => {
+    setListaGeral((listaAntiga) => {
+      return listaAntiga.map((item) => {
+        setModalProdutoRemovido(true);
+        return { ...item, cart: false };
       });
     });
   };
@@ -93,7 +98,7 @@ export default function Carrinho() {
         <View style={styles.editarProduto}>
           <TouchableOpacity
             style={{ alignSelf: "center" }}
-            onPress={() => handleConfirm(item)}
+            onPress={() => removerItem(item.id)}
           >
             <MaterialIcons name="close" size={30} color="red" />
           </TouchableOpacity>
@@ -154,12 +159,16 @@ export default function Carrinho() {
   return (
     <View>
       <View style={styles.container}>
-        <FlatList
-          data={carrinho}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={1}
-        />
+        {carrinho.length > 0 ? (
+          <FlatList
+            data={carrinho}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={1}
+          />
+        ) : (
+          <Text style={styles.text}>Carrinho está vazio!</Text>
+        )}
       </View>
 
       <View style={styles.resumo}>
@@ -174,11 +183,7 @@ export default function Carrinho() {
           </Text>
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        //onPress={() => confirmarApagarCarrinho()}
-        onPress={() => alert(JSON.stringify(carrinho, null, 2))}
-      >
+      <TouchableOpacity style={styles.button} onPress={() => limparLista()}>
         <Text style={styles.buttonText}>Limpar Carrinho</Text>
       </TouchableOpacity>
       <Modal visible={modalVisibleNome} animationType="fade" transparent={true}>
@@ -200,17 +205,14 @@ export default function Carrinho() {
       </Modal>
 
       <Modal
-        visible={deletarItemVisible}
+        visible={modalProdutoRemovido}
         animationType="fade"
         transparent={true}
       >
-        <ModalDeletarItem
+        <ModalProdutoRemovidoCarrinho
           handleClose={() => {
-            setDeletarItemVisible(false);
-            setItemToEdit(0);
+            setModalProdutoRemovido(false);
           }}
-          item={itemToEdit}
-          removerItem={() => removerItem(itemToEdit.id)}
         />
       </Modal>
     </View>
@@ -239,6 +241,13 @@ const styles = StyleSheet.create({
     elevation: 30,
     backgroundColor: "#ffffff",
   },
+  text: {
+    fontSize: 30,
+    fontWeight: "bold",
+    top: 150,
+    color: "#4B0082",
+    textAlign: "center",
+  },
   textLista: {
     color: "#0045b1",
     fontSize: 20,
@@ -263,8 +272,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    top: 640,
-    position: "absolute",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#4B0082",
@@ -324,8 +331,6 @@ const styles = StyleSheet.create({
     width: "30%",
   },
   resumo: {
-    position: "absolute",
-    top: 550,
     margin: 10,
     width: "93%",
     flexDirection: "row",

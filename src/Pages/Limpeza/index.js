@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import ModalAdicionar from "../../../components/Modal/modalAdicionar";
-import ModalEditarNome from "../../../components/Modal/modalEditarNome";
-import ModalEditarValor from "../../../components/Modal/modalEditarValor";
+import ModalAdicionar from "../../../components/Modal/AdicionarNovoProduto";
+import ModalEditarNome from "../../../components/Modal/EditarNome";
+import ModalEditarValor from "../../../components/Modal/EditarValor";
+import ModalAddCarrinho from "../../../components/Modal/AddCarrinho";
+import ModalProdutoExistenteCarrinho from "../../../components/Modal/ProdutoExistenteCarrinho";
 import {
   View,
   Text,
@@ -24,6 +26,9 @@ export default function Limpeza() {
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
+  const [modalAddCarrinhoVisible, setModalAddCarrinhoVisible] = useState(false);
+  const [modalProdutoExistenteCarrinho, setModalProdutoExistenteCarrinho] =
+    useState(false);
   const [itemToEdit, setItemToEdit] = useState(0);
 
   const [limpeza, setLimpeza] = useState([]);
@@ -56,8 +61,8 @@ export default function Limpeza() {
       return listaAntiga.map((item) => {
         if (item.id === id) {
           if (item.cart) {
-            Alert.alert("", "O Produto já está no carrinho");
-          } else Alert.alert("", "Produto adicionado ao carrinho!");
+            setModalProdutoExistenteCarrinho(true);
+          } else setModalAddCarrinhoVisible(true);
           return { ...item, cart: true };
         }
         return item;
@@ -168,6 +173,26 @@ export default function Limpeza() {
         <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
           id={itemToEdit}
+        />
+      </Modal>
+
+      <Modal
+        visible={modalAddCarrinhoVisible}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalAddCarrinho
+          handleClose={() => setModalAddCarrinhoVisible(false)}
+        />
+      </Modal>
+
+      <Modal
+        visible={modalProdutoExistenteCarrinho}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalProdutoExistenteCarrinho
+          handleClose={() => setModalProdutoExistenteCarrinho(false)}
         />
       </Modal>
     </View>
