@@ -11,6 +11,7 @@ import {
 
 import ModalEditarNome from "../../../components/Modal/modalEditarNome";
 import ModalEditarValor from "../../../components/Modal/modalEditarValor";
+import ModalDeletarItem from "../../../components/Modal/modalDeletarItem";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
@@ -20,92 +21,50 @@ export default function Carrinho() {
 
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
-  const [indexDoItemAEditar, setIndexDoItemAEditar] = useState(null);
+  const [itemToEdit, setItemToEdit] = useState(0);
+  const [deletarItemVisible, setDeletarItemVisible] = useState(false);
 
+  const [carrinho, setCarrinho] = useState([]);
   const [total, setTotal] = useState(0);
 
-  const editarNome = (index) => {
-    setIndexDoItemAEditar(index);
+  useEffect(() => {
+    const carrinhoFiltrado = listaGeral.filter((item) => item.cart === true);
+    setCarrinho(carrinhoFiltrado);
+  }, [listaGeral]);
+
+  const editarNome = (item) => {
+    setItemToEdit(item.id);
     setModalVisibleNome(true);
   };
 
-  const editarValor = (index) => {
-    setIndexDoItemAEditar(index);
+  const editarValor = (item) => {
+    setItemToEdit(item.id);
     setModalVisibleValor(true);
   };
 
-  /*  const removerItem = (indexToRemove) => {
-    // Criar um novo array excluindo o item com o índice indexToRemove
-    const novoArray = listaGeral.filter(
-      (item, index) => index !== indexToRemove
-    );
-
-    // Atualizar o estado com o novo array
-    setListaGeral(novoArray);
+  const handleConfirm = (item) => {
+    setItemToEdit(item);
+    setDeletarItemVisible(true);
   };
 
-  const limparCarrinho = () => {
-    lista([]);
-  }; */
-
-  /*   const confirmarApagarItem = (index) => {
-    Alert.alert("", "Deseja apagar o item da lista?", [
-      { text: "Não", onPress: () => console.log("Cancelado Exclusão") },
-      { text: "Sim", onPress: () => removerItem(index) },
-    ]);
-  };
-
-  const confirmarApagarCarrinho = () => {
-    Alert.alert("", "Deseja apagar todos os itens do carrinho?", [
-      { text: "Não", onPress: () => console.log("Cancelada Exclusão") },
-      { text: "Sim", onPress: () => limparCarrinho([]) },
-    ]);
-  }; */
-
-  /*  const handleIncrement = (index) => {
-    setCarrinho((prevCarrinho) => {
-      const novoCarrinho = [...prevCarrinho];
-      novoCarrinho[index].quantidade += 1;
-      // Garante que a quantidade mínima seja 1
-      novoCarrinho[index].quantidade = Math.max(
-        novoCarrinho[index].quantidade,
-        1
-      );
-      return novoCarrinho;
+  const removerItem = (id) => {
+    setListaGeral((listaAntiga) => {
+      return listaAntiga.map((item) => {
+        if (item && item.id === id) {
+          return { ...item, cart: false };
+        }
+        return item;
+      });
     });
-  }; */
-
-  /*   const handleDecrement = (index) => {
-    setCarrinho((prevCarrinho) => {
-      const novoCarrinho = [...prevCarrinho];
-      novoCarrinho[index].quantidade = Math.max(
-        novoCarrinho[index].quantidade - 1,
-        1
-      );
-      return novoCarrinho;
-    });
-  }; */
-
-  /*   const calcularTotalCarrinho = () => {
-    let novoTotal = 0;
-
-    for (const item of listaGeral) {
-      // Certifique-se de que o item tem as propriedades valor e quantidade
-      if (item.valor !== undefined && item.quantidade !== undefined) {
-        novoTotal += item.valor * item.quantidade;
-      }
-    }
-    setTotal(novoTotal);
-    return novoTotal;
   };
- */
+
   const renderItem = ({ item, index }) => (
     <View style={styles.listaContainer}>
       <View style={styles.superior}>
         {item.produto && item.produto.trim() !== "" && (
           <TouchableOpacity
             style={{ width: "80%" }}
-            onPress={() => editarNome(index)}
+            onPress={() => editarNome(item)}
           >
             <Text style={styles.nomeProduto} numberOfLines={1}>
               {" "}
@@ -115,7 +74,7 @@ export default function Carrinho() {
         )}
         <TouchableOpacity
           style={styles.unidadeProduto}
-          onPress={() => editarValor(index)}
+          onPress={() => editarValor(item)}
         >
           <View>
             <Text style={styles.textUnidade}>Unidade</Text>
@@ -134,7 +93,7 @@ export default function Carrinho() {
         <View style={styles.editarProduto}>
           <TouchableOpacity
             style={{ alignSelf: "center" }}
-            onPress={() => confirmarApagarItem(index)}
+            onPress={() => handleConfirm(item)}
           >
             <MaterialIcons name="close" size={30} color="red" />
           </TouchableOpacity>
@@ -155,7 +114,7 @@ export default function Carrinho() {
 
           <View style={styles.multiplicar}>
             <Text style={styles.textMultiplicar}>
-              {listaGeral[index].quantidade || 1}
+              {carrinho[index].quantidade || 1}
             </Text>
           </View>
 
@@ -178,7 +137,7 @@ export default function Carrinho() {
                 <Text style={styles.textTotal}>
                   R$
                   {(
-                    item.valor * (listaGeral[index].quantidade || 1)
+                    item.valor * (carrinho[index].quantidade || 1)
                   ).toLocaleString("pt-BR", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -196,9 +155,9 @@ export default function Carrinho() {
     <View>
       <View style={styles.container}>
         <FlatList
-          data={listaGeral}
+          data={carrinho}
           renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id.toString()}
           numColumns={1}
         />
       </View>
@@ -217,30 +176,41 @@ export default function Carrinho() {
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => confirmarApagarCarrinho()}
+        //onPress={() => confirmarApagarCarrinho()}
+        onPress={() => alert(JSON.stringify(carrinho, null, 2))}
       >
         <Text style={styles.buttonText}>Limpar Carrinho</Text>
       </TouchableOpacity>
-      <Modal
-        visible={modalVisibleNome}
-        animationType="slide"
-        transparent={true}
-      >
+      <Modal visible={modalVisibleNome} animationType="fade" transparent={true}>
         <ModalEditarNome
           handleClose={() => setModalVisibleNome(false)}
-          tipo={"Carrinho"}
-          indexDoItemAEditar={indexDoItemAEditar}
+          id={itemToEdit}
         />
       </Modal>
+
       <Modal
         visible={modalVisibleValor}
-        animationType="slide"
+        animationType="fade"
         transparent={true}
       >
         <ModalEditarValor
           handleClose={() => setModalVisibleValor(false)}
-          tipo={"Carrinho"}
-          indexDoItemAEditar={indexDoItemAEditar}
+          id={itemToEdit}
+        />
+      </Modal>
+
+      <Modal
+        visible={deletarItemVisible}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalDeletarItem
+          handleClose={() => {
+            setDeletarItemVisible(false);
+            setItemToEdit(0);
+          }}
+          item={itemToEdit}
+          removerItem={() => removerItem(itemToEdit.id)}
         />
       </Modal>
     </View>
@@ -251,7 +221,7 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 10,
     paddingRight: 15,
-    maxHeight: 400,
+    height: 500,
     backgroundColor: "#ffffffff",
     elevation: 17,
     borderColor: "#9932CC",

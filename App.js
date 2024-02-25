@@ -4,7 +4,6 @@ import "react-native-gesture-handler";
 import Header from "./components/Header";
 
 import { ListaGeralContextProvider } from "./src/Context/ListaGeralContext";
-import { IdentificadorContextProvider } from "./src/Context/IdentificadorContext";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -26,26 +25,24 @@ export default function App() {
   return (
     <NavigationContainer>
       <ListaGeralContextProvider>
-        <IdentificadorContextProvider>
-          <StatusBar
-            backgroundColor="#4B0082" // Cor de fundo da barra de status
-            barStyle="light-content" // Estilo do texto (pode ser 'dark-content' ou 'light-content')
-            translucent={false} // Se a barra de status deve ser translúcida
-          />
-          <Header />
-          <Stack.Navigator initialRouteName="Principal">
-            <Stack.Screen name="Principal" component={Principal} />
-            <Stack.Screen name="Carrinho" component={Carrinho} />
-            <Stack.Screen name="Limpeza" component={Limpeza} />
-            {/*<Stack.Screen name="Bebidas" component={Bebidas} />
+        <StatusBar
+          backgroundColor="#4B0082" // Cor de fundo da barra de status
+          barStyle="light-content" // Estilo do texto (pode ser 'dark-content' ou 'light-content')
+          translucent={false} // Se a barra de status deve ser translúcida
+        />
+        <Header />
+        <Stack.Navigator initialRouteName="Principal">
+          <Stack.Screen name="Principal" component={Principal} />
+          <Stack.Screen name="Carrinho" component={Carrinho} />
+          <Stack.Screen name="Limpeza" component={Limpeza} />
+          {/*<Stack.Screen name="Bebidas" component={Bebidas} />
           <Stack.Screen name="Higiene Pessoal" component={HigienePessoal} />
           <Stack.Screen name="Hortifruti" component={Hortifruti} />
           <Stack.Screen name="Temperos" component={Temperos} />
           <Stack.Screen name="Mercearia" component={Mercearia} />
           <Stack.Screen name="Açougue" component={Acougue} />
            */}
-          </Stack.Navigator>
-        </IdentificadorContextProvider>
+        </Stack.Navigator>
       </ListaGeralContextProvider>
     </NavigationContainer>
   );

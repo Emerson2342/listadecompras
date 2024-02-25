@@ -13,25 +13,27 @@ import { useListaGeralContext } from "../../src/Context/ListaGeralContext";
 export default function ModalEditarNome({ handleClose, id }) {
   const { listaGeral, setListaGeral } = useListaGeralContext();
 
-  const [novoItem, setNovoItem] = useState({
+  const itemAtual = listaGeral.find((item) => item.id === id);
+
+  const [novoNome, setNovoNome] = useState({
     id: id,
-    produto: "",
+    produto: itemAtual ? itemAtual.produto : "",
   });
 
-  const alterarProduto = () => {
-    const novoProduto = novoItem.produto;
+  const alterarNome = () => {
+    const novoProduto = novoNome.produto.trim();
 
-    if (!isNaN(novoProduto) && novoItem.produto.trim() !== "") {
+    if (novoProduto !== "") {
       setListaGeral((listaAntiga) => {
         return listaAntiga.map((item) => {
-          if (item.id === novoItem.id) {
-            return { ...item, produto: novoItem.produto };
+          if (item.id === novoNome.id) {
+            return { ...item, produto: novoProduto };
           }
           return item;
         });
       });
 
-      setNovoItem({
+      setNovoNome({
         id: 0,
         produto: "",
       });
@@ -50,10 +52,10 @@ export default function ModalEditarNome({ handleClose, id }) {
         <View style={styles.precoInputer}>
           <TextInput
             style={styles.input}
-            value={novoItem.produto}
+            value={novoNome.produto}
             onChangeText={(text) =>
-              setNovoItem({
-                ...novoItem,
+              setNovoNome({
+                ...novoNome,
                 produto: text,
               })
             }
@@ -61,12 +63,12 @@ export default function ModalEditarNome({ handleClose, id }) {
         </View>
 
         <View style={styles.buttonArea}>
-          <TouchableOpacity style={styles.button} onPress={handleClose}>
+          <TouchableOpacity style={styles.button} onPress={() => handleClose()}>
             <Text style={{ color: "#4B0082", fontWeight: "bold" }}>Voltar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.buttonSave]}
-            onPress={() => alterarProduto()}
+            onPress={() => alterarNome()}
           >
             <Text style={styles.buttonSaveText}>Alterar nome</Text>
           </TouchableOpacity>
@@ -78,7 +80,7 @@ export default function ModalEditarNome({ handleClose, id }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(24,24,24,0.8)",
+    backgroundColor: "rgba(24,24,24,0.9)",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",

@@ -13,24 +13,27 @@ import { useListaGeralContext } from "../../src/Context/ListaGeralContext";
 export default function ModalEditarValor({ handleClose, id }) {
   const { listaGeral, setListaGeral } = useListaGeralContext();
 
-  const [novoItem, setNovoItem] = useState({
+  const itemAtual = listaGeral.find((item) => item.id === id);
+
+  const [novoValor, setNovoValor] = useState({
     id: id,
-    valor: "",
+    valor: itemAtual ? itemAtual.valor : 0,
   });
 
   const alterarValor = () => {
-    if (!isNaN(novoItem.valor) && novoItem.valor.trim() !== "") {
+    if (!isNaN(novoValor.valor) && novoValor.valor.trim() !== "") {
       setListaGeral((listaAntiga) => {
         return listaAntiga.map((item) => {
-          if (item.id === novoItem.id) {
-            return { ...item, valor: novoItem.valor };
+          if (item.id === novoValor.id) {
+            return { ...item, valor: novoValor.valor };
           }
           return item;
         });
       });
 
-      setNovoItem({
+      setNovoValor({
         id: 0,
+
         valor: "",
       });
       handleClose();
@@ -46,17 +49,17 @@ export default function ModalEditarValor({ handleClose, id }) {
       <View style={styles.content}>
         <Text style={styles.titulo}>Digite o novo valor do produto</Text>
         <Text style={[styles.titulo, { color: "#0045b1", marginBottom: 10 }]}>
-          {novoItem.produto}
+          {itemAtual.produto}
         </Text>
         <View style={styles.precoInputer}>
           <Text style={styles.cifra}>R$</Text>
           <TextInput
             style={styles.input}
             placeholder="Digite o novo valor"
-            value={novoItem.valor ? novoItem.valor.toString() : ""}
+            value={novoValor.valor ? novoValor.valor.toString() : ""}
             onChangeText={(text) =>
-              setNovoItem({
-                ...novoItem,
+              setNovoValor({
+                ...novoValor,
                 valor: text.replace(",", "."),
               })
             }
@@ -81,7 +84,7 @@ export default function ModalEditarValor({ handleClose, id }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(24,24,24,0.9)",
+    backgroundColor: "rgba(24,24,24,0.7)",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",

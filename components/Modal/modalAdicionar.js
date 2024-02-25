@@ -9,7 +9,6 @@ import {
 import React, { useState } from "react";
 
 import { useListaGeralContext } from "../../src/Context/ListaGeralContext";
-import { useIdentificadorContext } from "../../src/Context/IdentificadorContext";
 
 export default function ModalAdicionar({ handleClose, tipo }) {
   const { identificador, setIdentificador, listaGeral, setListaGeral } =

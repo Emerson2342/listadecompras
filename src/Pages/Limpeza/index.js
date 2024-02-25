@@ -15,34 +15,31 @@ import {
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
-import { useIdentificadorContext } from "../../Context/IdentificadorContext";
 
 export default function Limpeza() {
   const navigation = useNavigation();
 
   const { identificador, listaGeral, setListaGeral } = useListaGeralContext();
-  // const { identificador } = useIdentificadorContext();
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
+  const [itemToEdit, setItemToEdit] = useState(0);
 
   const [limpeza, setLimpeza] = useState([]);
 
   useEffect(() => {
-    // Filtrar objetos com tipo "Limpeza"
     const listaLimpeza = listaGeral.filter((item) => item.tipo === "Limpeza");
     setLimpeza(listaLimpeza);
   }, [listaGeral]);
 
-  const addItem = () => {
-    setModalVisibleAdd(true);
-  };
-  const editarNome = () => {
+  const editarNome = (item) => {
+    setItemToEdit(item.id);
     setModalVisibleNome(true);
   };
 
-  const editarValor = () => {
+  const editarValor = (item) => {
+    setItemToEdit(item.id);
     setModalVisibleValor(true);
   };
 
@@ -54,32 +51,18 @@ export default function Limpeza() {
     setListaGeral(novoArray);
   };
 
-  const addAoCarrinho = (index) => {
-    /*     const item = limpeza[index];
-
-    if (item.valor !== "" && item.valor !== 0) {
-      // Verificar se o produto já existe no carrinho
-      const produtoExistente = carrinho.find(
-        (itemCarrinho) => itemCarrinho.produto === item.produto
-      );
-
-      if (produtoExistente) {
-        Alert.alert("", "Produto já existe no carrinho", [{ text: "Ok" }]);
-      } else {
-        // Criar uma cópia do objeto antes de modificar
-        const itemCarrinho = { ...item, cart: "Carrinho" };
-
-        // Adicionar o objeto modificado ao carrinho
-        setCarrinho([...carrinho, itemCarrinho]);
-
-        setNovoItem("", "");
-        Alert.alert("", "Produto adicionado ao carrinho", [{ text: "Ok" }]);
-        console.log(carrinho);
-      }
-    } else {
-      Alert.alert("", "Produto sem preço", [{ text: "Ok" }]);
-    } */
-    alert("Adicionado ao carrinho");
+  const addAoCarrinho = (id) => {
+    setListaGeral((listaAntiga) => {
+      return listaAntiga.map((item) => {
+        if (item.id === id) {
+          if (item.cart) {
+            Alert.alert("", "O Produto já está no carrinho");
+          } else Alert.alert("", "Produto adicionado ao carrinho!");
+          return { ...item, cart: true };
+        }
+        return item;
+      });
+    });
   };
 
   const confirmar = (indexToRemove) => {
@@ -91,13 +74,20 @@ export default function Limpeza() {
 
   const renderItem = ({ item, index }) => (
     <View style={styles.limpezaContainer}>
-      <View style={styles.produtoContainer}>
-        <TouchableOpacity onPress={() => editarNome(index)}>
-          <Text style={styles.textProduto} numberOfLines={1}>
-            {index + 1} - {item.produto}
-          </Text>
+      <TouchableOpacity onPress={() => editarNome(item)}>
+        <Text style={styles.textProduto} numberOfLines={1}>
+          {index + 1} - {item.produto}
+        </Text>
+      </TouchableOpacity>
+
+      <View style={styles.iconContainer}>
+        <TouchableOpacity
+          style={styles.iconContent}
+          onPress={() => addAoCarrinho(item.id)}
+        >
+          <MaterialIcons name="shopping-cart" size={24} color="#6495ED" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => editarValor(index)}>
+        <TouchableOpacity onPress={() => editarValor(item)}>
           <Text style={styles.textPreco}>
             R${" "}
             {(item.valor * (1 || 1)).toLocaleString("pt-BR", {
@@ -105,15 +95,6 @@ export default function Limpeza() {
               maximumFractionDigits: 2,
             })}
           </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.iconContainer}>
-        <TouchableOpacity
-          style={styles.iconContent}
-          //  onPress={() => addAoCarrinho(index)}
-          onPress={() => alert(item.id)}
-        >
-          <MaterialIcons name="shopping-cart" size={24} color="#6495ED" />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -139,23 +120,23 @@ export default function Limpeza() {
           data={limpeza}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
-          // keyExtractor={(item, index) => index.toString()}
           numColumns={2}
-          initialNumToRender={10} // Ajuste conforme necessário
+          initialNumToRender={10}
           maxToRenderPerBatch={5}
         />
       </View>
-      <View style={styles.infoContainer}>
-        <TouchableOpacity onPress={() => addItem()} style={styles.button}>
+      <View>
+        <TouchableOpacity
+          onPress={() => setModalVisibleAdd(true)}
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>Adicionar Novos Itens</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
-          // onPress={() => navigation.navigate("Carrinho")}
-
+          onPress={() => navigation.navigate("Carrinho")}
           onLongPress={() => alert(JSON.stringify(listaGeral, null, 2))}
-          onPress={() => alert(identificador)}
         >
           <Text style={styles.buttonText}>Itens do Carrinho</Text>
           <Image
@@ -165,27 +146,29 @@ export default function Limpeza() {
         </TouchableOpacity>
       </View>
 
-      <Modal visible={modalVisibleAdd} animationType="slide" transparent={true}>
+      <Modal visible={modalVisibleAdd} animationType="fade" transparent={true}>
         <ModalAdicionar
           handleClose={() => setModalVisibleAdd(false)}
           tipo={"Limpeza"}
         />
       </Modal>
 
-      <Modal
-        visible={modalVisibleNome}
-        animationType="slide"
-        transparent={true}
-      >
-        <ModalEditarNome handleClose={() => setModalVisibleNome(false)} />
+      <Modal visible={modalVisibleNome} animationType="fade" transparent={true}>
+        <ModalEditarNome
+          handleClose={() => setModalVisibleNome(false)}
+          id={itemToEdit}
+        />
       </Modal>
 
       <Modal
         visible={modalVisibleValor}
-        animationType="slide"
-        //transparent={true}
+        animationType="fade"
+        transparent={true}
       >
-        <ModalEditarValor handleClose={() => setModalVisibleValor(false)} />
+        <ModalEditarValor
+          handleClose={() => setModalVisibleValor(false)}
+          id={itemToEdit}
+        />
       </Modal>
     </View>
   );
@@ -195,7 +178,6 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: 530,
-    backgroundColor: "#fafafa",
     alignItems: "center",
     backgroundColor: "#ffffffff",
     elevation: 17,
@@ -211,6 +193,7 @@ const styles = StyleSheet.create({
     width: "45%",
     elevation: 30,
     backgroundColor: "#ffffff",
+    height: 60,
   },
 
   textProduto: {
@@ -223,12 +206,16 @@ const styles = StyleSheet.create({
     color: "#4b0",
     fontSize: 17,
     marginLeft: 3,
+    textAlign: "center",
   },
   iconContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingLeft: 5,
     paddingRight: 5,
+    //  backgroundColor: "#cece",
+    alignItems: "center",
+    height: "85%",
   },
 
   button: {
@@ -254,10 +241,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
-  },
-  infoContainer: {
-    position: "absolute",
-    top: 530,
-    width: "100%",
   },
 });
