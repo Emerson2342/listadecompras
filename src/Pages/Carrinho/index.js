@@ -12,6 +12,8 @@ import {
 import ModalEditarNome from "../../../components/Modal/EditarNome";
 import ModalEditarValor from "../../../components/Modal/EditarValor";
 import ModalProdutoRemovidoCarrinho from "../../../components/Modal/ProdutoRemovidoCarrinho";
+import ModalConfirmarApagarCarrinho from "../../../components/Modal/ConfirmarApagarCarrinho";
+import ModalCarrinhoApagado from "../../../components/Modal/CarrinhoLimpo";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
@@ -23,6 +25,9 @@ export default function Carrinho() {
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(0);
   const [modalProdutoRemovido, setModalProdutoRemovido] = useState(false);
+  const [confirmarApagarCarrinhoVisible, setConfirmarApagarcarrinhoVisible] =
+    useState(false);
+  const [carrinhoApagadoVisible, setCarrinhoApagadoVisible] = useState(false);
 
   const [carrinho, setCarrinho] = useState([]);
   const [total, setTotal] = useState(0);
@@ -54,10 +59,14 @@ export default function Carrinho() {
     });
   };
 
+  const handleConfimar = () => {
+    setConfirmarApagarcarrinhoVisible(true);
+  };
+
   const limparLista = () => {
     setListaGeral((listaAntiga) => {
       return listaAntiga.map((item) => {
-        setModalProdutoRemovido(true);
+        setCarrinhoApagadoVisible(true);
         return { ...item, cart: false };
       });
     });
@@ -183,8 +192,8 @@ export default function Carrinho() {
           </Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => limparLista()}>
-        <Text style={styles.buttonText}>Limpar Carrinho</Text>
+      <TouchableOpacity style={styles.button} onPress={() => handleConfimar()}>
+        <Text style={styles.buttonText}>Esvaziar Carrinho</Text>
       </TouchableOpacity>
       <Modal visible={modalVisibleNome} animationType="fade" transparent={true}>
         <ModalEditarNome
@@ -212,6 +221,32 @@ export default function Carrinho() {
         <ModalProdutoRemovidoCarrinho
           handleClose={() => {
             setModalProdutoRemovido(false);
+          }}
+        />
+      </Modal>
+
+      <Modal
+        visible={confirmarApagarCarrinhoVisible}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalConfirmarApagarCarrinho
+          handleClose={() => {
+            setConfirmarApagarcarrinhoVisible(false);
+          }}
+          limparLista={() => limparLista()}
+        />
+      </Modal>
+
+      <Modal
+        visible={carrinhoApagadoVisible}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalCarrinhoApagado
+          handleClose={() => {
+            setCarrinhoApagadoVisible(false);
+            setConfirmarApagarcarrinhoVisible(false);
           }}
         />
       </Modal>

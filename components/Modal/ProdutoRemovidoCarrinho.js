@@ -19,7 +19,7 @@ export default function ModalProdutoRemovidoCarrinho({ handleClose }) {
       clearTimeout(timeoutId);
       clearInterval(intervalId);
     };
-  }, [handleClose]);
+  }, [() => handleClose()]);
 
   /*   useEffect(() => {
     const timeoutId = setTimeout(() => {

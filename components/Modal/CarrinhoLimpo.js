@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 
-export default function ModalAddCarrinho({ handleClose }) {
+export default function ModalCarrinhoApagado({ handleClose }) {
   const [tempoDecorrido, setTempoDecorrido] = useState(0);
 
   useEffect(() => {
@@ -21,17 +21,10 @@ export default function ModalAddCarrinho({ handleClose }) {
     };
   }, [() => handleClose()]);
 
-  /*   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      () => handleClose();
-    }, 2000);
-
-    return () => clearTimeout(timeoutId); // Limpa o timer se o componente for desmontado antes do timeout
-  }, []); */
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.text}>Produto adicionado ao carrinho!</Text>
+        <Text style={styles.text}>Carrinho vazio!</Text>
       </View>
     </View>
   );
