@@ -4,16 +4,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Alert,
+  Modal,
 } from "react-native";
 import React, { useState } from "react";
 
 import { useListaGeralContext } from "../../src/Context/ListaGeralContext";
+import ModalProdutoJaCadastrado from "./ProdutoJaCadastrado";
+import ModalNomeValido from "./NomeValido";
+import ModalPrecoValido from "./PrecoValido";
 
 export default function ModalAdicionar({ handleClose, tipo }) {
   const { identificador, setIdentificador, listaGeral, setListaGeral } =
     useListaGeralContext();
-  // const { identificador, setIdentificador } = useIdentificadorContext();
+
+  const [produtoJaCadastrado, setProdutoJaCadastrado] = useState(false);
+  const [nomeValidoVisible, setNomeValidoVisible] = useState(false);
+  const [precoValidoVisible, setPrecoValidoVisible] = useState(false);
 
   const [novoItem, setNovoItem] = useState({
     id: identificador,
@@ -35,19 +41,9 @@ export default function ModalAdicionar({ handleClose, tipo }) {
       );
 
       if (isNaN(precoItem)) {
-        Alert.alert("", "Favor digitar um preço válido.", [
-          {
-            text: "OK",
-            onPress: () => console.log("OK Pressed. Digitar um valor válido"),
-          },
-        ]);
+        setPrecoValidoVisible(true);
       } else if (produtoExistente) {
-        Alert.alert("", "Produto já cadastrado", [
-          {
-            text: "OK",
-            onPress: () => console.log("Ok Pressed. Produto já cadastrado"),
-          },
-        ]);
+        setProdutoJaCadastrado(true);
       } else {
         setListaGeral((prevLista) => [...prevLista, novoItem]);
         setNovoItem({
@@ -62,9 +58,7 @@ export default function ModalAdicionar({ handleClose, tipo }) {
         handleClose();
       }
     } else {
-      Alert.alert("", "Favor digitar um produto.", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      setNomeValidoVisible(true);
     }
   };
 
@@ -120,6 +114,19 @@ export default function ModalAdicionar({ handleClose, tipo }) {
           </TouchableOpacity>
         </View>
       </View>
+      <Modal visible={produtoJaCadastrado} transparent={true} transition="fade">
+        <ModalProdutoJaCadastrado
+          handleClose={() => setProdutoJaCadastrado(false)}
+        />
+      </Modal>
+
+      <Modal visible={nomeValidoVisible} transparent={true} transition="fade">
+        <ModalNomeValido handleClose={() => setNomeValidoVisible(false)} />
+      </Modal>
+
+      <Modal visible={precoValidoVisible} transparent={true} transition="fade">
+        <ModalPrecoValido handleClose={() => setPrecoValidoVisible(false)} />
+      </Modal>
     </View>
   );
 }

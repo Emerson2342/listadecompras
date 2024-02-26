@@ -5,14 +5,19 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Modal,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 
 import { useListaGeralContext } from "../../src/Context/ListaGeralContext";
+import ModalProdutoJaCadastrado from "./ProdutoJaCadastrado";
+import ModalNomeValido from "./NomeValido";
 
 export default function ModalEditarNome({ handleClose, id }) {
   const { listaGeral, setListaGeral } = useListaGeralContext();
 
+  const [produtoJaCadastrado, setProdutoJaCadastrado] = useState(false);
+  const [nomeValidoVisible, setNomeValidoVisible] = useState(false);
   const itemAtual = listaGeral.find((item) => item.id === id);
 
   const [novoNome, setNovoNome] = useState({
@@ -22,26 +27,31 @@ export default function ModalEditarNome({ handleClose, id }) {
 
   const alterarNome = () => {
     const novoProduto = novoNome.produto.trim();
+    const produtoExistente = listaGeral.find(
+      (item) => item.produto === novoProduto
+    );
 
-    if (novoProduto !== "") {
-      setListaGeral((listaAntiga) => {
-        return listaAntiga.map((item) => {
-          if (item.id === novoNome.id) {
-            return { ...item, produto: novoProduto };
-          }
-          return item;
-        });
-      });
-
-      setNovoNome({
-        id: 0,
-        produto: "",
-      });
-      handleClose();
+    if (produtoExistente) {
+      setProdutoJaCadastrado(true);
     } else {
-      Alert.alert("", "Favor digitar um nome válido.", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      if (novoProduto !== "") {
+        setListaGeral((listaAntiga) => {
+          return listaAntiga.map((item) => {
+            if (item.id === novoNome.id) {
+              return { ...item, produto: novoProduto };
+            }
+            return item;
+          });
+        });
+
+        setNovoNome({
+          id: 0,
+          produto: "",
+        });
+        handleClose();
+      } else {
+        setNomeValidoVisible(true);
+      }
     }
   };
 
@@ -74,6 +84,14 @@ export default function ModalEditarNome({ handleClose, id }) {
           </TouchableOpacity>
         </View>
       </View>
+      <Modal visible={produtoJaCadastrado} transparent={true} transition="fade">
+        <ModalProdutoJaCadastrado
+          handleClose={() => setProdutoJaCadastrado(false)}
+        />
+      </Modal>
+      <Modal visible={nomeValidoVisible} transparent={true} transition="fade">
+        <ModalNomeValido handleClose={() => setNomeValidoVisible(false)} />
+      </Modal>
     </View>
   );
 }

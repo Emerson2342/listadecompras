@@ -8,19 +8,14 @@ export default function ModalProdutoRemovido({ handleClose }) {
     const timeoutId = setTimeout(() => {
       handleClose();
     }, 800);
-
-
     const intervalId = setInterval(() => {
       setTempoDecorrido((tempoAnterior) => tempoAnterior + 1);
     }, 1000);
-
-
     return () => {
       clearTimeout(timeoutId);
       clearInterval(intervalId);
     };
   }, [() => handleClose()]);
-
 
   return (
     <View style={styles.container}>

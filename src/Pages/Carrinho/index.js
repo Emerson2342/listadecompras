@@ -14,10 +14,9 @@ import ModalEditarValor from "../../../components/Modal/EditarValor";
 import ModalProdutoRemovidoCarrinho from "../../../components/Modal/ProdutoRemovidoCarrinho";
 import ModalConfirmarApagarCarrinho from "../../../components/Modal/ConfirmarApagarCarrinho";
 import ModalCarrinhoApagado from "../../../components/Modal/CarrinhoLimpo";
-import { MaterialCommunityIcons } from 'react-native-vector-icons'
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
-
 
 export default function Carrinho() {
   const { listaGeral, setListaGeral } = useListaGeralContext();
@@ -34,7 +33,8 @@ export default function Carrinho() {
   const [valorTotal, setValorTotal] = useState(0);
 
   useEffect(() => {
-    const carrinhoFiltrado = listaGeral.filter((item) => item.cart === true)
+    const carrinhoFiltrado = listaGeral
+      .filter((item) => item.cart === true)
       .sort((a, b) => a.produto.localeCompare(b.produto));
     setCarrinho(carrinhoFiltrado);
   }, [listaGeral]);
@@ -106,13 +106,12 @@ export default function Carrinho() {
     setValorTotal(total);
   }, [carrinho]);
 
-
   const renderItem = ({ item, index }) => (
     <View style={styles.listaContainer}>
       <View style={styles.superior}>
         {item.produto && item.produto.trim() !== "" && (
           <TouchableOpacity
-            style={{ width: "80%" }}
+            style={{ width: "60%" }}
             onPress={() => editarNome(item)}
           >
             <Text style={styles.nomeProduto} numberOfLines={1}>
@@ -125,10 +124,8 @@ export default function Carrinho() {
           style={styles.unidadeProduto}
           onPress={() => editarValor(item)}
         >
-          <View>
-            <Text style={styles.textUnidade}>Unidade</Text>
-          </View>
           <Text style={styles.textUnidade}>
+            Unidade {""}
             R$
             {(item.valor * 1 || 0).toLocaleString("pt-BR", {
               minimumFractionDigits: 2,
@@ -227,7 +224,8 @@ export default function Carrinho() {
           </Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.button}
+      <TouchableOpacity
+        style={styles.button}
         onPress={() => handleConfimar()}
         onLongPress={() => alert(JSON.stringify(carrinho, null, 2))}
       >
@@ -269,9 +267,7 @@ export default function Carrinho() {
         transparent={true}
       >
         <ModalConfirmarApagarCarrinho
-          handleClose={() =>
-            setConfirmarApagarcarrinhoVisible(false)
-          }
+          handleClose={() => setConfirmarApagarcarrinhoVisible(false)}
           limparLista={() => limparLista()}
           carrinhoApagadoVisible={() => setCarrinhoApagadoVisible(true)}
         />
@@ -295,21 +291,18 @@ export default function Carrinho() {
 const styles = StyleSheet.create({
   container: {
     padding: 5,
-    height: 560,
+    height: 530,
     width: "95%",
     alignSelf: "center",
-
   },
   listaContainer: {
     height: 70,
     borderColor: "#9932CC",
     borderWidth: 1,
-    overflow: "hidden",
     borderRadius: 5,
-    marginVertical: 7,
+    marginVertical: 3,
     padding: 5,
     backgroundColor: "#ffffff",
-
   },
   textMultiplicar: {
     color: "#123d4e",
@@ -321,6 +314,8 @@ const styles = StyleSheet.create({
   textUnidade: {
     color: "#2f6f68",
     fontSize: 15,
+    width: "100%",
+    textAlign: "right",
   },
   textTotal: {
     color: "#0099cd",
@@ -335,7 +330,7 @@ const styles = StyleSheet.create({
     padding: 15,
     alignSelf: "center",
     elevation: 18,
-    width: "90%"
+    width: "90%",
   },
   buttonText: {
     color: "#fff",
@@ -344,13 +339,11 @@ const styles = StyleSheet.create({
   },
   superior: {
     width: "100%",
-    height: "60%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
   inferior: {
     width: "100%",
-    height: "40%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -359,8 +352,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   unidadeProduto: {
-    width: "20%",
-    alignItems: "flex-end",
+    flexDirection: "row",
+    width: "40%",
   },
   editarProduto: {
     width: "30%",
@@ -387,13 +380,12 @@ const styles = StyleSheet.create({
     width: "30%",
   },
   resumo: {
-    margin: 10,
     alignSelf: "center",
     flexDirection: "row",
   },
   resumoContent: {
     alignItems: "flex-end",
-    width: "100%",
+    width: "90%",
     borderTopWidth: 1,
   },
   textText: {

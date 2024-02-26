@@ -4,14 +4,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Alert,
+  Modal,
 } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 
 import { useListaGeralContext } from "../../src/Context/ListaGeralContext";
+import ModalPrecoValido from "./PrecoValido";
 
 export default function ModalEditarValor({ handleClose, id }) {
   const { listaGeral, setListaGeral } = useListaGeralContext();
+
+  const [precoValidoVisible, setPrecoValidoVisible] = useState(false);
 
   const itemAtual = listaGeral.find((item) => item.id === id);
 
@@ -37,9 +40,7 @@ export default function ModalEditarValor({ handleClose, id }) {
       });
       handleClose();
     } else {
-      Alert.alert("", "Favor digitar um valor válido.", [
-        { text: "OK", onPress: () => console.log("OK Pressed") },
-      ]);
+      setPrecoValidoVisible(true);
     }
   };
 
@@ -77,6 +78,10 @@ export default function ModalEditarValor({ handleClose, id }) {
           </TouchableOpacity>
         </View>
       </View>
+
+      <Modal visible={precoValidoVisible} transparent={true} transition="fade">
+        <ModalPrecoValido handleClose={() => setPrecoValidoVisible(false)} />
+      </Modal>
     </View>
   );
 }

@@ -3,9 +3,10 @@ import ModalAdicionar from "../../../components/Modal/AdicionarNovoProduto";
 import ModalEditarNome from "../../../components/Modal/EditarNome";
 import ModalEditarValor from "../../../components/Modal/EditarValor";
 import ModalAddCarrinho from "../../../components/Modal/AddCarrinho";
-import ModalProdutoRemovidoCarrinho from "../../../components/Modal/ProdutoRemovidoCarrinho"
+import ModalProdutoRemovidoCarrinho from "../../../components/Modal/ProdutoRemovidoCarrinho";
 import ModalApagarProduto from "../../../components/Modal/ApagarProduto";
 import ModalProdutoRemovido from "../../../components/Modal/ProdutoRemovido";
+import ModalSemPreco from "../../../components/Modal/SemPreco";
 import {
   View,
   Text,
@@ -16,7 +17,11 @@ import {
   Modal,
   Image,
 } from "react-native";
-import { MaterialIcons, MaterialCommunityIcons, Ionicons } from 'react-native-vector-icons'
+import {
+  MaterialIcons,
+  MaterialCommunityIcons,
+  Ionicons,
+} from "react-native-vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
 
@@ -29,14 +34,19 @@ export default function Mercearia() {
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [modalAddCarrinhoVisible, setModalAddCarrinhoVisible] = useState(false);
   const [modalRemovidoCarrinho, setModalRemovidoCarrinho] = useState(false);
-  const [modalApagarProdutoVisible, setModalApagarProdutoVisible] = useState(false);
-  const [ModalProdutoRemovidoVisible, setProdutoRemovidoVisible] = useState(false);
+  const [modalApagarProdutoVisible, setModalApagarProdutoVisible] =
+    useState(false);
+
+  const [modalAvisoPreco, setModalAvisoPreco] = useState(false);
+  const [ModalProdutoRemovidoVisible, setProdutoRemovidoVisible] =
+    useState(false);
   const [itemToEdit, setItemToEdit] = useState(0);
 
-  const [Mercearia, setMercearia] = useState([]);
+  const [mercearia, setMercearia] = useState([]);
 
   useEffect(() => {
-    const listaMercearia = listaGeral.filter((item) => item.tipo === "Mercearia")
+    const listaMercearia = listaGeral
+      .filter((item) => item.tipo === "Mercearia")
       .sort((a, b) => a.produto.localeCompare(b.produto));
     setMercearia(listaMercearia);
   }, [listaGeral]);
@@ -59,26 +69,29 @@ export default function Mercearia() {
     });
   };
 
-  const addAoCarrinho = (id) => {
-    setListaGeral((listaAntiga) => {
-      return listaAntiga.map((item) => {
-        if (item.id === id) {
-          item.cart ? setModalRemovidoCarrinho(true) : setModalAddCarrinhoVisible(true)
-          return { ...item, cart: !item.cart };
-        }
-        return item;
-      });
-    });
+  const addAoCarrinho = (id, item) => {
+    item.valor <= 0
+      ? setModalAvisoPreco(true)
+      : setListaGeral((listaAntiga) => {
+          return listaAntiga.map((item) => {
+            if (item.id === id) {
+              item.cart
+                ? setModalRemovidoCarrinho(true)
+                : setModalAddCarrinhoVisible(true);
+              return { ...item, cart: !item.cart };
+            }
+            return item;
+          });
+        });
   };
 
   const confirmar = (id) => {
-    setItemToEdit(id)
-    setModalApagarProdutoVisible(true)
+    setItemToEdit(id);
+    setModalApagarProdutoVisible(true);
   };
 
-
   const renderItem = ({ item, index }) => (
-    <View style={styles.MerceariaContainer}>
+    <View style={styles.merceariaContainer}>
       <TouchableOpacity onPress={() => editarNome(item)}>
         <Text style={styles.textProduto} numberOfLines={1}>
           {index + 1} - {item.produto}
@@ -88,9 +101,13 @@ export default function Mercearia() {
       <View style={styles.iconContainer}>
         <TouchableOpacity
           style={styles.iconContent}
-          onPress={() => addAoCarrinho(item.id)}
+          onPress={() => addAoCarrinho(item.id, item)}
         >
-          <MaterialCommunityIcons name={item.cart ? "cart" : 'cart-variant'} size={24} color="#4B0082" />
+          <MaterialCommunityIcons
+            name={item.cart ? "cart" : "cart-variant"}
+            size={24}
+            color="#4B0082"
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => editarValor(item)}>
           <Text style={styles.textPreco}>
@@ -122,7 +139,7 @@ export default function Mercearia() {
       <View style={styles.imgCarrinho}></View>
       <View style={styles.container}>
         <FlatList
-          data={Mercearia}
+          data={mercearia}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           numColumns={2}
@@ -141,7 +158,7 @@ export default function Mercearia() {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("Carrinho")}
-          onLongPress={() => alert(JSON.stringify(Mercearia, null, 2))}
+          onLongPress={() => alert(JSON.stringify(mercearia, null, 2))}
         >
           <Text style={styles.buttonText}>Itens do Carrinho</Text>
           <Image
@@ -155,11 +172,14 @@ export default function Mercearia() {
         <ModalAdicionar
           handleClose={() => setModalVisibleAdd(false)}
           tipo={"Mercearia"}
-
         />
       </Modal>
 
-      <Modal visible={modalApagarProdutoVisible} animationType="fade" transparent={true}>
+      <Modal
+        visible={modalApagarProdutoVisible}
+        animationType="fade"
+        transparent={true}
+      >
         <ModalApagarProduto
           handleClose={() => setModalApagarProdutoVisible(false)}
           removerItem={() => removerItem(itemToEdit)}
@@ -173,9 +193,9 @@ export default function Mercearia() {
         transparent={true}
       >
         <ModalProdutoRemovido
-          handleClose={() => setProdutoRemovidoVisible(false)} />
+          handleClose={() => setProdutoRemovidoVisible(false)}
+        />
       </Modal>
-
 
       <Modal visible={modalVisibleNome} animationType="fade" transparent={true}>
         <ModalEditarNome
@@ -214,6 +234,10 @@ export default function Mercearia() {
           handleClose={() => setModalRemovidoCarrinho(false)}
         />
       </Modal>
+
+      <Modal visible={modalAvisoPreco} animationType="fade" transparent={true}>
+        <ModalSemPreco handleClose={() => setModalAvisoPreco(false)} />
+      </Modal>
     </View>
   );
 }
@@ -222,18 +246,18 @@ const styles = StyleSheet.create({
   container: {
     padding: 5,
     height: 560,
-    width: "95%",
     alignSelf: "center",
   },
-  MerceariaContainer: {
+  merceariaContainer: {
     borderColor: "#9932CC",
     borderWidth: 1,
     borderRadius: 5,
-    margin: 5,
-    width: "48%",
-    // elevation: 30,
+    marginLeft: "2%",
+    marginRight: "2%",
+    marginVertical: 3,
+    width: "46%",
     backgroundColor: "#ffffff",
-    height: 60,
+    height: 65,
   },
 
   textProduto: {
@@ -259,7 +283,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    marginTop: 20,
+    marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#4B0082",

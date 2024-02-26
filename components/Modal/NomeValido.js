@@ -1,13 +1,14 @@
 import { View, Text, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 
-export default function ModalProdutoRemovidoCarrinho({ handleClose }) {
+export default function ModalNomeValido({ handleClose }) {
   const [tempoDecorrido, setTempoDecorrido] = useState(0);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       handleClose();
-    }, 800);
+    }, 700);
+
     const intervalId = setInterval(() => {
       setTempoDecorrido((tempoAnterior) => tempoAnterior + 1);
     }, 1000);
@@ -21,7 +22,7 @@ export default function ModalProdutoRemovidoCarrinho({ handleClose }) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.text}>Produto removido do carrinho!</Text>
+        <Text style={styles.text}>Favor digitar um produto!</Text>
       </View>
     </View>
   );
@@ -46,7 +47,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    // fontWeight: "bold",
     textAlign: "center",
     color: "#4B0082",
   },

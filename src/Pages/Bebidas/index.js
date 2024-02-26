@@ -3,9 +3,10 @@ import ModalAdicionar from "../../../components/Modal/AdicionarNovoProduto";
 import ModalEditarNome from "../../../components/Modal/EditarNome";
 import ModalEditarValor from "../../../components/Modal/EditarValor";
 import ModalAddCarrinho from "../../../components/Modal/AddCarrinho";
-import ModalProdutoRemovidoCarrinho from "../../../components/Modal/ProdutoRemovidoCarrinho"
+import ModalProdutoRemovidoCarrinho from "../../../components/Modal/ProdutoRemovidoCarrinho";
 import ModalApagarProduto from "../../../components/Modal/ApagarProduto";
 import ModalProdutoRemovido from "../../../components/Modal/ProdutoRemovido";
+import ModalSemPreco from "../../../components/Modal/SemPreco";
 import {
   View,
   Text,
@@ -16,7 +17,11 @@ import {
   Modal,
   Image,
 } from "react-native";
-import { MaterialIcons, MaterialCommunityIcons, Ionicons } from 'react-native-vector-icons'
+import {
+  MaterialIcons,
+  MaterialCommunityIcons,
+  Ionicons,
+} from "react-native-vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
 
@@ -29,14 +34,19 @@ export default function Bebidas() {
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [modalAddCarrinhoVisible, setModalAddCarrinhoVisible] = useState(false);
   const [modalRemovidoCarrinho, setModalRemovidoCarrinho] = useState(false);
-  const [modalApagarProdutoVisible, setModalApagarProdutoVisible] = useState(false);
-  const [ModalProdutoRemovidoVisible, setProdutoRemovidoVisible] = useState(false);
+  const [modalApagarProdutoVisible, setModalApagarProdutoVisible] =
+    useState(false);
+
+  const [modalAvisoPreco, setModalAvisoPreco] = useState(false);
+  const [ModalProdutoRemovidoVisible, setProdutoRemovidoVisible] =
+    useState(false);
   const [itemToEdit, setItemToEdit] = useState(0);
 
   const [bebidas, setBebidas] = useState([]);
 
   useEffect(() => {
-    const listaBebidas = listaGeral.filter((item) => item.tipo === "Bebidas")
+    const listaBebidas = listaGeral
+      .filter((item) => item.tipo === "Bebidas")
       .sort((a, b) => a.produto.localeCompare(b.produto));
     setBebidas(listaBebidas);
   }, [listaGeral]);
@@ -59,23 +69,26 @@ export default function Bebidas() {
     });
   };
 
-  const addAoCarrinho = (id) => {
-    setListaGeral((listaAntiga) => {
-      return listaAntiga.map((item) => {
-        if (item.id === id) {
-          item.cart ? setModalRemovidoCarrinho(true) : setModalAddCarrinhoVisible(true)
-          return { ...item, cart: !item.cart };
-        }
-        return item;
-      });
-    });
+  const addAoCarrinho = (id, item) => {
+    item.valor <= 0
+      ? setModalAvisoPreco(true)
+      : setListaGeral((listaAntiga) => {
+          return listaAntiga.map((item) => {
+            if (item.id === id) {
+              item.cart
+                ? setModalRemovidoCarrinho(true)
+                : setModalAddCarrinhoVisible(true);
+              return { ...item, cart: !item.cart };
+            }
+            return item;
+          });
+        });
   };
 
   const confirmar = (id) => {
-    setItemToEdit(id)
-    setModalApagarProdutoVisible(true)
+    setItemToEdit(id);
+    setModalApagarProdutoVisible(true);
   };
-
 
   const renderItem = ({ item, index }) => (
     <View style={styles.bebidasContainer}>
@@ -88,9 +101,13 @@ export default function Bebidas() {
       <View style={styles.iconContainer}>
         <TouchableOpacity
           style={styles.iconContent}
-          onPress={() => addAoCarrinho(item.id)}
+          onPress={() => addAoCarrinho(item.id, item)}
         >
-          <MaterialCommunityIcons name={item.cart ? "cart" : 'cart-variant'} size={24} color="#4B0082" />
+          <MaterialCommunityIcons
+            name={item.cart ? "cart" : "cart-variant"}
+            size={24}
+            color="#4B0082"
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => editarValor(item)}>
           <Text style={styles.textPreco}>
@@ -155,11 +172,14 @@ export default function Bebidas() {
         <ModalAdicionar
           handleClose={() => setModalVisibleAdd(false)}
           tipo={"Bebidas"}
-
         />
       </Modal>
 
-      <Modal visible={modalApagarProdutoVisible} animationType="fade" transparent={true}>
+      <Modal
+        visible={modalApagarProdutoVisible}
+        animationType="fade"
+        transparent={true}
+      >
         <ModalApagarProduto
           handleClose={() => setModalApagarProdutoVisible(false)}
           removerItem={() => removerItem(itemToEdit)}
@@ -173,9 +193,9 @@ export default function Bebidas() {
         transparent={true}
       >
         <ModalProdutoRemovido
-          handleClose={() => setProdutoRemovidoVisible(false)} />
+          handleClose={() => setProdutoRemovidoVisible(false)}
+        />
       </Modal>
-
 
       <Modal visible={modalVisibleNome} animationType="fade" transparent={true}>
         <ModalEditarNome
@@ -214,6 +234,10 @@ export default function Bebidas() {
           handleClose={() => setModalRemovidoCarrinho(false)}
         />
       </Modal>
+
+      <Modal visible={modalAvisoPreco} animationType="fade" transparent={true}>
+        <ModalSemPreco handleClose={() => setModalAvisoPreco(false)} />
+      </Modal>
     </View>
   );
 }
@@ -222,18 +246,18 @@ const styles = StyleSheet.create({
   container: {
     padding: 5,
     height: 560,
-    width: "95%",
     alignSelf: "center",
   },
   bebidasContainer: {
     borderColor: "#9932CC",
     borderWidth: 1,
     borderRadius: 5,
-    margin: 5,
-    width: "48%",
-    // elevation: 30,
+    marginLeft: "2%",
+    marginRight: "2%",
+    marginVertical: 3,
+    width: "46%",
     backgroundColor: "#ffffff",
-    height: 60,
+    height: 65,
   },
 
   textProduto: {
@@ -259,7 +283,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    marginTop: 20,
+    marginTop: 10,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#4B0082",
