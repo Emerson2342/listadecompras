@@ -60,7 +60,9 @@ export default function Carrinho() {
   };
 
   const handleConfimar = () => {
-    setConfirmarApagarcarrinhoVisible(true);
+    carrinho.length > 0
+      ? setConfirmarApagarcarrinhoVisible(true)
+      : setCarrinhoApagadoVisible(true);
   };
 
   const limparLista = () => {
