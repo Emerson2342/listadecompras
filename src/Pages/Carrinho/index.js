@@ -68,7 +68,6 @@ export default function Carrinho() {
   const limparLista = () => {
     setListaGeral((listaAntiga) => {
       return listaAntiga.map((item) => {
-        setCarrinhoApagadoVisible(true);
         return { ...item, cart: false };
       });
     });
@@ -237,6 +236,7 @@ export default function Carrinho() {
             setConfirmarApagarcarrinhoVisible(false);
           }}
           limparLista={() => limparLista()}
+          carrinhoApagadoVisible={() => setCarrinhoApagadoVisible(true)}
         />
       </Modal>
 
@@ -248,7 +248,6 @@ export default function Carrinho() {
         <ModalCarrinhoApagado
           handleClose={() => {
             setCarrinhoApagadoVisible(false);
-            setConfirmarApagarcarrinhoVisible(false);
           }}
         />
       </Modal>

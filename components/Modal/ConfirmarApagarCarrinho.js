@@ -11,6 +11,7 @@ import React from "react";
 export default function ModalConfirmarApagarCarrinho({
   handleClose,
   limparLista,
+  carrinhoApagadoVisible,
 }) {
   return (
     <View style={styles.container}>
@@ -28,6 +29,8 @@ export default function ModalConfirmarApagarCarrinho({
             style={[styles.button, { backgroundColor: "#4b0082" }]}
             onPress={() => {
               limparLista();
+              handleClose();
+              carrinhoApagadoVisible();
             }}
           >
             <Text style={styles.buttonConfirmarText}>Confirmar</Text>
