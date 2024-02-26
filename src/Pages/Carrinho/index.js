@@ -14,9 +14,10 @@ import ModalEditarValor from "../../../components/Modal/EditarValor";
 import ModalProdutoRemovidoCarrinho from "../../../components/Modal/ProdutoRemovidoCarrinho";
 import ModalConfirmarApagarCarrinho from "../../../components/Modal/ConfirmarApagarCarrinho";
 import ModalCarrinhoApagado from "../../../components/Modal/CarrinhoLimpo";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { MaterialCommunityIcons } from 'react-native-vector-icons'
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
+
 
 export default function Carrinho() {
   const { listaGeral, setListaGeral } = useListaGeralContext();
@@ -30,10 +31,11 @@ export default function Carrinho() {
   const [carrinhoApagadoVisible, setCarrinhoApagadoVisible] = useState(false);
 
   const [carrinho, setCarrinho] = useState([]);
-  const [total, setTotal] = useState(0);
+  const [valorTotal, setValorTotal] = useState(0);
 
   useEffect(() => {
-    const carrinhoFiltrado = listaGeral.filter((item) => item.cart === true);
+    const carrinhoFiltrado = listaGeral.filter((item) => item.cart === true)
+      .sort((a, b) => a.produto.localeCompare(b.produto));
     setCarrinho(carrinhoFiltrado);
   }, [listaGeral]);
 
@@ -73,6 +75,38 @@ export default function Carrinho() {
     });
   };
 
+  const aumentarQuantidade = (id) => {
+    setListaGeral((listaAntiga) => {
+      return listaAntiga.map((item) => {
+        if (item.id === id) {
+          return { ...item, quantidade: item.quantidade + 1 };
+        }
+        return item;
+      });
+    });
+  };
+
+  const diminuirQuantidade = (id) => {
+    setListaGeral((listaAntiga) => {
+      return listaAntiga.map((item) => {
+        if (item.id === id) {
+          const novaQuantidade = Math.max(1, item.quantidade - 1);
+          return { ...item, quantidade: novaQuantidade };
+        }
+        return item;
+      });
+    });
+  };
+
+  useEffect(() => {
+    let total = 0;
+    carrinho.forEach((item) => {
+      total += item.valor * (item.quantidade || 1);
+    });
+    setValorTotal(total);
+  }, [carrinho]);
+
+
   const renderItem = ({ item, index }) => (
     <View style={styles.listaContainer}>
       <View style={styles.superior}>
@@ -110,14 +144,14 @@ export default function Carrinho() {
             style={{ alignSelf: "center" }}
             onPress={() => removerItem(item.id)}
           >
-            <MaterialIcons name="close" size={30} color="red" />
+            <MaterialCommunityIcons name="cart-remove" size={25} color="red" />
           </TouchableOpacity>
         </View>
 
         <View style={styles.quantidade}>
           <TouchableOpacity
             style={styles.aumentar}
-            onPress={() => handleIncrement(index)}
+            onPress={() => aumentarQuantidade(item.id)}
           >
             <AntDesign
               color={"#86c694"}
@@ -135,7 +169,7 @@ export default function Carrinho() {
 
           <TouchableOpacity
             style={styles.diminuir}
-            onPress={() => handleDecrement(index)}
+            onPress={() => diminuirQuantidade(item.id)}
           >
             <AntDesign
               size={23}
@@ -177,7 +211,7 @@ export default function Carrinho() {
             numColumns={1}
           />
         ) : (
-          <Text style={styles.text}>Carrinho está vazio!</Text>
+          <Text style={styles.textVazio}>Carrinho está vazio!</Text>
         )}
       </View>
 
@@ -186,14 +220,17 @@ export default function Carrinho() {
           <Text style={styles.textText}>TOTAL</Text>
           <Text style={[styles.textTotal, { fontSize: 30 }]}>
             R${" "}
-            {total.toLocaleString("pt-BR", {
+            {valorTotal.toLocaleString("pt-BR", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}
           </Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => handleConfimar()}>
+      <TouchableOpacity style={styles.button}
+        onPress={() => handleConfimar()}
+        onLongPress={() => alert(JSON.stringify(carrinho, null, 2))}
+      >
         <Text style={styles.buttonText}>Esvaziar Carrinho</Text>
       </TouchableOpacity>
       <Modal visible={modalVisibleNome} animationType="fade" transparent={true}>
@@ -232,9 +269,9 @@ export default function Carrinho() {
         transparent={true}
       >
         <ModalConfirmarApagarCarrinho
-          handleClose={() => {
-            setConfirmarApagarcarrinhoVisible(false);
-          }}
+          handleClose={() =>
+            setConfirmarApagarcarrinhoVisible(false)
+          }
           limparLista={() => limparLista()}
           carrinhoApagadoVisible={() => setCarrinhoApagadoVisible(true)}
         />
@@ -257,45 +294,29 @@ export default function Carrinho() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 10,
-    paddingRight: 15,
-    height: 500,
-    backgroundColor: "#ffffffff",
-    elevation: 17,
-    borderColor: "#9932CC",
-    borderWidth: 1,
+    padding: 5,
+    height: 560,
+    width: "95%",
+    alignSelf: "center",
+
   },
   listaContainer: {
-    height: 80,
+    height: 70,
     borderColor: "#9932CC",
     borderWidth: 1,
     overflow: "hidden",
     borderRadius: 5,
-    marginVertical: 5,
-    paddingLeft: 5,
-    paddingRight: 5,
-    elevation: 30,
+    marginVertical: 7,
+    padding: 5,
     backgroundColor: "#ffffff",
-  },
-  text: {
-    fontSize: 30,
-    fontWeight: "bold",
-    top: 150,
-    color: "#4B0082",
-    textAlign: "center",
-  },
-  textLista: {
-    color: "#0045b1",
-    fontSize: 20,
-    height: "60%",
-  },
 
+  },
   textMultiplicar: {
     color: "#123d4e",
     textAlign: "center",
-    fontSize: 30,
+    fontSize: 25,
     justifyContent: "center",
-    height: 50,
+    height: 40,
   },
   textUnidade: {
     color: "#2f6f68",
@@ -308,13 +329,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#4B0082",
-    borderRadius: 8,
+    borderRadius: 5,
     padding: 15,
     alignSelf: "center",
-    elevation: 8,
+    elevation: 18,
+    width: "90%"
   },
   buttonText: {
     color: "#fff",
@@ -342,7 +363,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   editarProduto: {
-    // backgroundColor: "#fafa",
     width: "30%",
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -368,7 +388,7 @@ const styles = StyleSheet.create({
   },
   resumo: {
     margin: 10,
-    width: "93%",
+    alignSelf: "center",
     flexDirection: "row",
   },
   resumoContent: {
@@ -386,9 +406,7 @@ const styles = StyleSheet.create({
     width: "80%",
     alignSelf: "center",
     textAlign: "center",
-
-    // backgroundColor: "#4B0082",
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#4B0082",
   },

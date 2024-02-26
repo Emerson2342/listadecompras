@@ -193,7 +193,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 23,
-      tipo: "Higiene Pessoal",
+      tipo: "HigienePessoal",
       produto: "Creme Dental",
       valor: 5.99,
       quantidade: 1,
@@ -201,7 +201,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 24,
-      tipo: "Higiene Pessoal",
+      tipo: "HigienePessoal",
       produto: "Papel Higiênico",
       valor: 9.8,
       quantidade: 1,
@@ -209,7 +209,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 25,
-      tipo: "Higiene Pessoal",
+      tipo: "HigienePessoal",
       produto: "Escova de Dente",
       valor: 4.9,
       quantidade: 1,
@@ -217,7 +217,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 26,
-      tipo: "Higiene PEssoal",
+      tipo: "HigienePessoal",
       produto: "Sabonete",
       valor: 2.99,
       quantidade: 1,
@@ -225,7 +225,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 27,
-      tipo: "Higiene Pessoal",
+      tipo: "HigienePessoal",
       produto: "Bucha de Banho",
       valor: 4.99,
       quantidade: 1,
@@ -233,21 +233,21 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 28,
-      tipo: "Higiene Pessoal",
+      tipo: "HigienePessoal",
       produto: "Shampoo",
       valor: 0,
       quantidade: 1,
     },
     {
       id: 29,
-      tipo: "Higiene Pessoal",
+      tipo: "HigienePessoal",
       produto: "Condicionador",
       valor: 13.0,
       quantidade: 1,
     },
     {
       id: 30,
-      tipo: "Higiene Pessoal",
+      tipo: "HigienePessoal",
       produto: "Desodorante",
       valor: 9.9,
       quantidade: 1,
@@ -255,14 +255,14 @@ export const ListaGeralContextProvider = ({ children }) => {
 
     {
       id: 31,
-      tipo: "Higiene Pessoal",
+      tipo: "HigienePessoal",
       produto: "Creme de pele",
       valor: 9.99,
       quantidade: 1,
     },
     {
       id: 32,
-      tipo: "Higiene Pessoal",
+      tipo: "HigienePessoal",
       produto: "Absorvente",
       valor: 12.9,
       quantidade: 1,

@@ -6,28 +6,22 @@ export default function ModalAddCarrinho({ handleClose }) {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      handleClose(); // Chama a função handleClose após 2 segundos
-    }, 1000);
+      handleClose();
+    }, 800);
 
-    // Atualiza o estado do tempo decorrido a cada segundo
+
     const intervalId = setInterval(() => {
       setTempoDecorrido((tempoAnterior) => tempoAnterior + 1);
     }, 1000);
 
-    // Limpa os timers se o componente for desmontado antes do timeout
+
     return () => {
       clearTimeout(timeoutId);
       clearInterval(intervalId);
     };
   }, [() => handleClose()]);
 
-  /*   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      () => handleClose();
-    }, 2000);
 
-    return () => clearTimeout(timeoutId); // Limpa o timer se o componente for desmontado antes do timeout
-  }, []); */
   return (
     <View style={styles.container}>
       <View style={styles.content}>

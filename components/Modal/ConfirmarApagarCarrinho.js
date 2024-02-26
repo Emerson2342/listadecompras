@@ -21,7 +21,7 @@ export default function ModalConfirmarApagarCarrinho({
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={() => handleClose()}>
             <Text style={[styles.buttonConfirmarText, { color: "#4B0082" }]}>
-              Voltar
+              Cancelar
             </Text>
           </TouchableOpacity>
 

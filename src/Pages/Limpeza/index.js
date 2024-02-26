@@ -3,7 +3,9 @@ import ModalAdicionar from "../../../components/Modal/AdicionarNovoProduto";
 import ModalEditarNome from "../../../components/Modal/EditarNome";
 import ModalEditarValor from "../../../components/Modal/EditarValor";
 import ModalAddCarrinho from "../../../components/Modal/AddCarrinho";
-import ModalProdutoExistenteCarrinho from "../../../components/Modal/ProdutoExistenteCarrinho";
+import ModalProdutoRemovidoCarrinho from "../../../components/Modal/ProdutoRemovidoCarrinho"
+import ModalApagarProduto from "../../../components/Modal/ApagarProduto";
+import ModalProdutoRemovido from "../../../components/Modal/ProdutoRemovido";
 import {
   View,
   Text,
@@ -14,27 +16,28 @@ import {
   Modal,
   Image,
 } from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { MaterialIcons, MaterialCommunityIcons, Ionicons } from 'react-native-vector-icons'
 import { useNavigation } from "@react-navigation/native";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
 
 export default function Limpeza() {
   const navigation = useNavigation();
-
   const { identificador, listaGeral, setListaGeral } = useListaGeralContext();
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [modalAddCarrinhoVisible, setModalAddCarrinhoVisible] = useState(false);
-  const [modalProdutoExistenteCarrinho, setModalProdutoExistenteCarrinho] =
-    useState(false);
+  const [modalRemovidoCarrinho, setModalRemovidoCarrinho] = useState(false);
+  const [modalApagarProdutoVisible, setModalApagarProdutoVisible] = useState(false);
+  const [ModalProdutoRemovidoVisible, setProdutoRemovidoVisible] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(0);
 
   const [limpeza, setLimpeza] = useState([]);
 
   useEffect(() => {
-    const listaLimpeza = listaGeral.filter((item) => item.tipo === "Limpeza");
+    const listaLimpeza = listaGeral.filter((item) => item.tipo === "Limpeza")
+      .sort((a, b) => a.produto.localeCompare(b.produto));
     setLimpeza(listaLimpeza);
   }, [listaGeral]);
 
@@ -48,34 +51,31 @@ export default function Limpeza() {
     setModalVisibleValor(true);
   };
 
-  const removerItem = (indexToRemove) => {
-    // Criar um novo array excluindo o item com o índice indexToRemove
-    const novoArray = listaGeral.filter((_, index) => index !== indexToRemove);
-
-    // Atualizar o estado com o novo array
-    setListaGeral(novoArray);
+  const removerItem = (id) => {
+    setListaGeral((listaAntiga) => {
+      const novaLista = listaAntiga.filter((item) => item.id !== id);
+      setProdutoRemovidoVisible(true);
+      return novaLista;
+    });
   };
 
   const addAoCarrinho = (id) => {
     setListaGeral((listaAntiga) => {
       return listaAntiga.map((item) => {
         if (item.id === id) {
-          if (item.cart) {
-            setModalProdutoExistenteCarrinho(true);
-          } else setModalAddCarrinhoVisible(true);
-          return { ...item, cart: true };
+          item.cart ? setModalRemovidoCarrinho(true) : setModalAddCarrinhoVisible(true)
+          return { ...item, cart: !item.cart };
         }
         return item;
       });
     });
   };
 
-  const confirmar = (indexToRemove) => {
-    Alert.alert("", "Deseja apagar o item da limpeza?", [
-      { text: "Não", onPress: () => console.log("Cancelado Exclusão") },
-      { text: "Sim", onPress: () => removerItem(indexToRemove) },
-    ]);
+  const confirmar = (id) => {
+    setItemToEdit(id)
+    setModalApagarProdutoVisible(true)
   };
+
 
   const renderItem = ({ item, index }) => (
     <View style={styles.limpezaContainer}>
@@ -90,7 +90,7 @@ export default function Limpeza() {
           style={styles.iconContent}
           onPress={() => addAoCarrinho(item.id)}
         >
-          <MaterialIcons name="shopping-cart" size={24} color="#6495ED" />
+          <MaterialCommunityIcons name={item.cart ? "cart" : 'cart-variant'} size={24} color="#4B0082" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => editarValor(item)}>
           <Text style={styles.textPreco}>
@@ -104,12 +104,12 @@ export default function Limpeza() {
 
         <TouchableOpacity
           style={styles.iconContent}
-          onPress={() => confirmar(index)}
+          onPress={() => confirmar(item.id)}
         >
           <MaterialIcons
             style={{ top: -2 }}
-            name="close"
-            size={26}
+            name="delete-forever"
+            size={24}
             color="red"
           />
         </TouchableOpacity>
@@ -141,7 +141,7 @@ export default function Limpeza() {
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("Carrinho")}
-          onLongPress={() => alert(JSON.stringify(listaGeral, null, 2))}
+          onLongPress={() => alert(JSON.stringify(limpeza, null, 2))}
         >
           <Text style={styles.buttonText}>Itens do Carrinho</Text>
           <Image
@@ -155,8 +155,27 @@ export default function Limpeza() {
         <ModalAdicionar
           handleClose={() => setModalVisibleAdd(false)}
           tipo={"Limpeza"}
+
         />
       </Modal>
+
+      <Modal visible={modalApagarProdutoVisible} animationType="fade" transparent={true}>
+        <ModalApagarProduto
+          handleClose={() => setModalApagarProdutoVisible(false)}
+          removerItem={() => removerItem(itemToEdit)}
+          item={itemToEdit}
+        />
+      </Modal>
+
+      <Modal
+        visible={ModalProdutoRemovidoVisible}
+        animationType="fade"
+        transparent={true}
+      >
+        <ModalProdutoRemovido
+          handleClose={() => setProdutoRemovidoVisible(false)} />
+      </Modal>
+
 
       <Modal visible={modalVisibleNome} animationType="fade" transparent={true}>
         <ModalEditarNome
@@ -187,12 +206,12 @@ export default function Limpeza() {
       </Modal>
 
       <Modal
-        visible={modalProdutoExistenteCarrinho}
+        visible={modalRemovidoCarrinho}
         animationType="fade"
         transparent={true}
       >
-        <ModalProdutoExistenteCarrinho
-          handleClose={() => setModalProdutoExistenteCarrinho(false)}
+        <ModalProdutoRemovidoCarrinho
+          handleClose={() => setModalRemovidoCarrinho(false)}
         />
       </Modal>
     </View>
@@ -201,22 +220,18 @@ export default function Limpeza() {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: 530,
-    alignItems: "center",
-    backgroundColor: "#ffffffff",
-    elevation: 17,
-    borderColor: "#9932CC",
-    borderWidth: 1,
+    padding: 5,
+    height: 560,
+    width: "95%",
+    alignSelf: "center",
   },
   limpezaContainer: {
     borderColor: "#9932CC",
     borderWidth: 1,
     borderRadius: 5,
     margin: 5,
-    marginLeft: 10,
-    width: "45%",
-    elevation: 30,
+    width: "48%",
+    // elevation: 30,
     backgroundColor: "#ffffff",
     height: 60,
   },

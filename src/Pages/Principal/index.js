@@ -9,29 +9,32 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useListaGeralContext } from "../../Context/ListaGeralContext";
 
 const data = [
   { id: "1", category: "Limpeza" },
-  // { id: "2", category: "Bebidas" },
-  //{ id: "3", category: "Higiene Pessoal" },
-  //{ id: "4", category: "Hortifruti" },
-  //{ id: "5", category: "Temperos" },
-  //{ id: "6", category: "Mercearia" },
-  //{ id: "7", category: "Açougue" },
-  // Adicione mais itens conforme necessário
+  { id: "2", category: "Bebidas" },
+  { id: "3", category: "Higiene Pessoal" },
+  { id: "4", category: "Hortifruti" },
+  { id: "5", category: "Temperos" },
+  { id: "6", category: "Mercearia" },
+  { id: "7", category: "Açougue" },
+
 ];
 
 const imageMapping = {
   Limpeza: require("../../Imagens/limpeza.jpg"),
-  //  Bebidas: require("../../Imagens/bebidas.jpg"),
-  // "Higiene Pessoal": require("../../Imagens/higienePessoal.jpg"),
-  //Hortifruti: require("../../Imagens/hortifruti.jpg"),
-  //Temperos: require("../../Imagens/temperos.jpg"),
-  //Mercearia: require("../../Imagens/mercearia.jpg"),
-  //Açougue: require("../../Imagens/acougue.jpg"),
+  Bebidas: require("../../Imagens/bebidas.jpg"),
+  "Higiene Pessoal": require("../../Imagens/higienePessoal.jpg"),
+  Hortifruti: require("../../Imagens/hortifruti.jpg"),
+  Temperos: require("../../Imagens/temperos.jpg"),
+  Mercearia: require("../../Imagens/mercearia.jpg"),
+  Açougue: require("../../Imagens/acougue.jpg"),
 };
 
 export default function Principal() {
+  const { listaGeral } = useListaGeralContext();
+
   const navigation = useNavigation();
 
   const navigateToPage = (pageName) => {
@@ -56,13 +59,14 @@ export default function Principal() {
           data={data}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
-          numColumns={2} // Pode ajustar o número de colunas conforme necessário
+          numColumns={2}
         />
       </View>
 
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("Carrinho")}
+        onLongPress={() => alert(JSON.stringify(listaGeral, null, 2))}
       >
         <Text style={styles.buttonText}>Itens do Carrinho</Text>
         <Image

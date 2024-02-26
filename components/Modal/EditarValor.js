@@ -33,7 +33,6 @@ export default function ModalEditarValor({ handleClose, id }) {
 
       setNovoValor({
         id: 0,
-
         valor: "",
       });
       handleClose();

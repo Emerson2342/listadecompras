@@ -2,18 +2,11 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Alert,
+  TouchableOpacity
 } from "react-native";
 import React from "react";
 
-export default function ModalDeletarItem({ handleClose, item, removerItem }) {
-  if (!item) {
-    // Adicione um tratamento aqui se o item for nulo por algum motivo
-    return null;
-  }
-
+export default function ModalApagarProduto({ handleClose, item, removerItem }) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -22,7 +15,7 @@ export default function ModalDeletarItem({ handleClose, item, removerItem }) {
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={() => handleClose()}>
             <Text style={[styles.buttonConfirmarText, { color: "#4B0082" }]}>
-              Voltar
+              Cancelar
             </Text>
           </TouchableOpacity>
 
