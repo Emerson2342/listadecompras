@@ -1,9 +1,9 @@
-![Página Principal](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/Home.jpg)
-![Página de Produtos](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/Produtos.jpg)
-![Página Carrinho](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/Carrinho.jpg))
-![Adicionar Novo Produto](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/AdicionarProdutoNovo.jpg)
-![Editar Nome do Produto](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/EditarNome.jpg)
-![Editar Preço do Produto](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/EditarPreco.jpg)
+![Página Principal](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/Home.jpg)![Página de Produtos](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/Produtos.jpg)
+
+![Página Carrinho](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/Carrinho.jpg)![Adicionar Novo Produto](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/AdicionarProdutoNovo.jpg)
+
+![Editar Nome do Produto](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/EditarNome.jpg)![Editar Preço do Produto](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/EditarPreco.jpg)
+
 
 
 
