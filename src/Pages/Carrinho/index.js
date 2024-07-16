@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  Alert,
   Modal,
   TouchableOpacity,
 } from "react-native";
@@ -20,7 +19,6 @@ import { useListaGeralContext } from "../../Context/ListaGeralContext";
 
 export default function Carrinho() {
   const { listaGeral, setListaGeral } = useListaGeralContext();
-
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
   const [itemToEdit, setItemToEdit] = useState(0);
@@ -34,7 +32,7 @@ export default function Carrinho() {
 
   useEffect(() => {
     const carrinhoFiltrado = listaGeral
-      .filter((item) => item.cart === true)
+      .filter((item) => item.cart == true)
       .sort((a, b) => a.produto.localeCompare(b.produto));
     setCarrinho(carrinhoFiltrado);
   }, [listaGeral]);
@@ -61,6 +59,17 @@ export default function Carrinho() {
     });
   };
 
+  const handleSelected = (id) => {
+    setListaGeral((listaAntiga) => {
+      return listaAntiga.map((item) => {
+        if (item && item.id === id) {
+          return { ...item, selected: !item.selected };
+        }
+        return item;
+      });
+    });
+  };
+
   const handleConfimar = () => {
     carrinho.length > 0
       ? setConfirmarApagarcarrinhoVisible(true)
@@ -70,7 +79,7 @@ export default function Carrinho() {
   const limparLista = () => {
     setListaGeral((listaAntiga) => {
       return listaAntiga.map((item) => {
-        return { ...item, cart: false };
+        return { ...item, cart: false, selected: false };
       });
     });
   };
@@ -106,96 +115,108 @@ export default function Carrinho() {
     setValorTotal(total);
   }, [carrinho]);
 
-  const renderItem = ({ item, index }) => (
-    <View style={styles.listaContainer}>
-      <View style={styles.superior}>
-        {item.produto && item.produto.trim() !== "" && (
+  const renderItem = ({ item, index }) => {
+    return (
+      <View
+        style={item.selected ? [styles.listaContainer, { backgroundColor: '#FFB347' }] : styles.listaContainer}>
+        <View style={styles.superior}>
+          {item.produto && item.produto.trim() !== "" && (
+            <TouchableOpacity
+              style={{ width: "60%" }}
+              onPress={() => editarNome(item)}
+            >
+              <Text style={styles.nomeProduto} numberOfLines={1}>
+                {" "}
+                {index + 1} - {item.produto}
+              </Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
-            style={{ width: "60%" }}
-            onPress={() => editarNome(item)}
+            style={styles.unidadeProduto}
+            onPress={() => editarValor(item)}
           >
-            <Text style={styles.nomeProduto} numberOfLines={1}>
-              {" "}
-              {index + 1} - {item.produto}
+            <Text style={styles.textUnidade}>
+              Unidade {""}
+              R$
+              {(item.valor * 1 || 0).toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </Text>
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity
-          style={styles.unidadeProduto}
-          onPress={() => editarValor(item)}
-        >
-          <Text style={styles.textUnidade}>
-            Unidade {""}
-            R$
-            {(item.valor * 1 || 0).toLocaleString("pt-BR", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.inferior}>
-        <View style={styles.editarProduto}>
-          <TouchableOpacity
-            style={{ alignSelf: "center" }}
-            onPress={() => removerItem(item.id)}
-          >
-            <MaterialCommunityIcons name="cart-remove" size={25} color="red" />
           </TouchableOpacity>
         </View>
 
-        <View style={styles.quantidade}>
-          <TouchableOpacity
-            style={styles.aumentar}
-            onPress={() => aumentarQuantidade(item.id)}
-          >
-            <AntDesign
-              color={"#86c694"}
-              size={23}
-              name="up"
-              style={{ textAlign: "center" }}
-            />
-          </TouchableOpacity>
+        <View style={styles.inferior}>
+          <View style={styles.editarProduto}>
+            <TouchableOpacity
+              style={{ alignSelf: "center" }}
+              onPress={() => handleSelected(item.id, item)}
+            >
+              {item.selected ? <MaterialCommunityIcons name="checkbox-outline" size={25} color="#9932CC" /> :
+                <MaterialCommunityIcons name="checkbox-blank-outline" size={25} color="#9932CC" />}
 
-          <View style={styles.multiplicar}>
-            <Text style={styles.textMultiplicar}>
-              {carrinho[index].quantidade || 1}
-            </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ alignSelf: "center" }}
+              onPress={() => removerItem(item.id)}
+            >
+              <MaterialCommunityIcons name="cart-remove" size={25} color="red" />
+            </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            style={styles.diminuir}
-            onPress={() => diminuirQuantidade(item.id)}
-          >
-            <AntDesign
-              size={23}
-              color={"#86c694"}
-              name="down"
-              style={{ textAlign: "center" }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.valorFinal}>
-          {item.valor !== undefined && (
-            <View>
-              <View>
-                <Text style={styles.textTotal}>
-                  R$
-                  {(
-                    item.valor * (carrinho[index].quantidade || 1)
-                  ).toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </Text>
-              </View>
+          <View style={styles.quantidade}>
+            <TouchableOpacity
+              style={styles.aumentar}
+              onPress={() => aumentarQuantidade(item.id)}
+            >
+              <AntDesign
+                color={"#2f6f68"}
+                size={23}
+                name="up"
+                style={{ textAlign: "center" }}
+              />
+            </TouchableOpacity>
+
+            <View style={styles.multiplicar}>
+              <Text style={styles.textMultiplicar}>
+                {carrinho[index].quantidade || 1}
+              </Text>
             </View>
-          )}
+
+            <TouchableOpacity
+              style={styles.diminuir}
+              onPress={() => diminuirQuantidade(item.id)}
+            >
+              <AntDesign
+                size={23}
+                color={"#2f6f68"}
+                name="down"
+                style={{ textAlign: "center" }}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.valorFinal}>
+            {item.valor !== undefined && (
+              <View>
+                <View>
+                  <Text style={styles.textTotal}>
+                    R$
+                    {(
+                      item.valor * (carrinho[index].quantidade || 1)
+                    ).toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </Text>
+                </View>
+              </View>
+            )}
+          </View>
         </View>
+
       </View>
-    </View>
-  );
+    )
+  };
 
   return (
     <View>
@@ -305,7 +326,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   textMultiplicar: {
-    color: "#123d4e",
+    color: "#000",
     textAlign: "center",
     fontSize: 25,
     justifyContent: "center",

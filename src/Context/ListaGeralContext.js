@@ -21,6 +21,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 48.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
 
     {
@@ -30,6 +31,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 25.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 3,
@@ -38,6 +40,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 28.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 4,
@@ -46,6 +49,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 23.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 5,
@@ -54,6 +58,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 20.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 6,
@@ -62,6 +67,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 23.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 7,
@@ -70,6 +76,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 23.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 8,
@@ -78,6 +85,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 19.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 9,
@@ -86,6 +94,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 22.0,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 10,
@@ -94,6 +103,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 9.8,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 11,
@@ -102,6 +112,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 11.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 12,
@@ -110,6 +121,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 15.0,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 13,
@@ -118,6 +130,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 11.0,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 14,
@@ -126,6 +139,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 13.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 15,
@@ -134,6 +148,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 20.98,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 16,
@@ -142,6 +157,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 23.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 17,
@@ -150,6 +166,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 3.49,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 18,
@@ -158,6 +175,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 1.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 19,
@@ -166,6 +184,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 9.8,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 20,
@@ -174,6 +193,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 2.69,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 21,
@@ -182,6 +202,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 8.0,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 22,
@@ -190,6 +211,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 3.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 23,
@@ -198,6 +220,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 5.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 24,
@@ -206,6 +229,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 9.8,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 25,
@@ -214,6 +238,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 4.9,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 26,
@@ -222,6 +247,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 2.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 27,
@@ -230,6 +256,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       valor: 4.99,
       quantidade: 1,
       cart: false,
+      selected: false
     },
     {
       id: 28,
@@ -237,6 +264,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       produto: "Shampoo",
       valor: 0,
       quantidade: 1,
+      selected: false
     },
     {
       id: 29,
@@ -244,6 +272,7 @@ export const ListaGeralContextProvider = ({ children }) => {
       produto: "Condicionador",
       valor: 13.0,
       quantidade: 1,
+      selected: false
     },
     {
       id: 30,

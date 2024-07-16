@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import "react-native-gesture-handler";
 import Header from "./components/Header";

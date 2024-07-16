@@ -28,6 +28,7 @@ export default function ModalAdicionar({ handleClose, tipo }) {
     valor: "",
     quantidade: 1,
     cart: false,
+    selected: false
   });
 
   const adicionarItem = () => {

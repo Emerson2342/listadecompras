@@ -73,16 +73,16 @@ export default function Limpeza() {
     item.valor <= 0
       ? setModalAvisoPreco(true)
       : setListaGeral((listaAntiga) => {
-          return listaAntiga.map((item) => {
-            if (item.id === id) {
-              item.cart
-                ? setModalRemovidoCarrinho(true)
-                : setModalAddCarrinhoVisible(true);
-              return { ...item, cart: !item.cart };
-            }
-            return item;
-          });
+        return listaAntiga.map((item) => {
+          if (item.id === id) {
+            item.cart
+              ? setModalRemovidoCarrinho(true)
+              : setModalAddCarrinhoVisible(true);
+            return { ...item, cart: !item.cart };
+          }
+          return item;
         });
+      });
   };
 
   const confirmar = (id) => {

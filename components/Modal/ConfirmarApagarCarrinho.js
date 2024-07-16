@@ -3,8 +3,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TextInput,
-  Alert,
 } from "react-native";
 import React from "react";
 
