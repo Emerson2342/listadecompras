@@ -1,27 +1,41 @@
 {
-  "expo": {
-    "name": "listaCompras",
-    "slug": "listaCompras",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+  "cli": {
+    "version": ">= 5.9.3"
+  },
+  "build": {
+    "development": {
+      "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
+      "ios": {
+        "buildConfiguration": "Debug"
       }
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  },
+  "expo": {
+    "name": "listadecompras",
+    "version": "1.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "3bc58fbe-d23d-47cd-9605-7596fb5912b4"
+      }
+    },
+    "android": {
+      "package": "com.missinhoo.listadecompras"
+    },
+    "icon": "./src/Imagens/icone.png",
+    "splash": {
+      "image": "./src/Imagens/icone.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#fff"
     }
   }
 }
