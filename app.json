@@ -21,7 +21,8 @@
     "production": {}
   },
   "expo": {
-    "name": "Lista de Compras",
+    "name": "listadecompras",
+    "displayName":"Lista de Compras",
     "version": "1.0.1",
     "extra": {
       "eas": {
