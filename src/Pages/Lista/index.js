@@ -18,6 +18,10 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
 import { MotiView } from "moti";
 
+import * as Print from "expo-print";
+import * as Sharing from "expo-sharing";
+import * as FileSystem from "expo-file-system";
+
 export default function Lista({ navigation }) {
   const { listaGeral, setListaGeral } = useListaGeralContext();
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
@@ -264,6 +268,76 @@ export default function Lista({ navigation }) {
     );
   };
 
+  const createHtml = () => {
+    let order = 1;
+
+    let itemsHtml = carrinho
+      .map(
+        (item) => `
+      <div style="display: flex; flex-direction: row; border-bottom: 1px solid #ddd; padding: 5px;">
+        <p style="width: 15%; text-align: center;">${order++}</p>
+        <p style="width: 50%; color: #0099cd;">${item.produto}</p>
+        <p style="width: 20%; text-align: center; color: #f47f00;">${
+          item.quantidade
+        }</p>
+      </div>
+    `
+      )
+      .join("");
+
+    return `
+      <html lang="pt-br">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+          body {font-family: 'Courier New'; width: 80%; height: 80%; border: 3px solid #4B0082; border-radius: 5px; padding: 5px; margin: 5% 10%;}
+          p {font-size: 18px; margin: 5px;}
+          h1 {text-align: center; font-size: 30px; color: #fff; width: 70%; margin-left: 15%; background-color: #4B0082; border-radius: 5px;}
+        </style>
+      </head>
+      <body>
+        <h1>Lista de Compras</h1>    
+        <div> 
+          <div style="display: flex; flex-direction: row; border-bottom: 1px dashed #000; padding: 5px;">
+            <p style="width: 15%; text-align: center;">Ord</p>
+            <p style="width: 50%; text-align: center;">Produto</p>
+            <p style="width: 20%; text-align: center;">Quantidade</p>
+          </div>
+          ${itemsHtml}
+        </div>
+      </body>
+      </html>
+    `;
+  };
+
+  const createPdf = async () => {
+    try {
+      const nomeDoArquivo = "Lista de Compras.pdf";
+      const { uri } = await Print.printToFileAsync({
+        html: createHtml(),
+        base64: false,
+      });
+
+      const novoEndereco = `${FileSystem.documentDirectory}${nomeDoArquivo}`;
+
+      await FileSystem.moveAsync({
+        from: uri,
+        to: novoEndereco,
+      });
+
+      console.log("PDF salvo em:", novoEndereco);
+
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(novoEndereco);
+      }
+    } catch (error) {
+      console.error("Erro ao gerar ou compartilhar o  PDF:", error);
+      alert("Erro ao gerar ou compartilhar o  PDF:", error);
+    }
+  };
+
   return (
     <View>
       <View style={styles.container}>
@@ -278,6 +352,9 @@ export default function Lista({ navigation }) {
           <Text style={styles.textVazio}>Lista está vazia!</Text>
         )}
       </View>
+      <TouchableOpacity onPress={createPdf}>
+        <Text>Create PDF</Text>
+      </TouchableOpacity>
       <View style={styles.resumo}>
         <View style={styles.resumoContent}>
           <Text style={styles.textText}>VALOR TOTAL DA LISTA</Text>
