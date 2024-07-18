@@ -9,14 +9,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Principal from "./src/Pages/Principal";
 
-import Bebidas from "./src/Pages/Bebidas";
-import HigienePessoal from "./src/Pages/HigienePessoal";
-import Hortifruti from "./src/Pages/Hortifruti";
-import Temperos from "./src/Pages/Temperos";
-import Mercearia from "./src/Pages/Mercearia";
-import Acougue from "./src/Pages/Acougue";
-import Limpeza from "./src/Pages/Limpeza";
 import Carrinho from "./src/Pages/Carrinho";
+import CategoryScreen from "./src/Pages/CategoryScreen";
 
 const Stack = createStackNavigator();
 
@@ -32,15 +26,8 @@ export default function App() {
         <Header />
         <Stack.Navigator initialRouteName="Principal">
           <Stack.Screen name="Principal" component={Principal} />
+          <Stack.Screen name="Category" component={CategoryScreen} />
           <Stack.Screen name="Carrinho" component={Carrinho} />
-          <Stack.Screen name="Limpeza" component={Limpeza} />
-          <Stack.Screen name="Bebidas" component={Bebidas} />
-          <Stack.Screen name="Higiene Pessoal" component={HigienePessoal} />
-          <Stack.Screen name="Hortifruti" component={Hortifruti} />
-          <Stack.Screen name="Temperos" component={Temperos} />
-          <Stack.Screen name="Mercearia" component={Mercearia} />
-          <Stack.Screen name="Açougue" component={Acougue} />
-
         </Stack.Navigator>
       </ListaGeralContextProvider>
     </NavigationContainer>

@@ -18,7 +18,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
 import { MotiView } from "moti";
 
-export default function Carrinho() {
+export default function Carrinho({ navigation }) {
   const { listaGeral, setListaGeral } = useListaGeralContext();
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
@@ -39,6 +39,20 @@ export default function Carrinho() {
       .sort((a, b) => a.produto.localeCompare(b.produto));
     setCarrinho(carrinhoFiltrado);
   }, [listaGeral]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: "#fff",
+      },
+      headerTintColor: "#4B0082",
+      headerTitleStyle: {
+        fontWeight: "bold",
+        fontSize: 30,
+      },
+      headerTitleAlign: "center"
+    });
+  }, [])
 
   const editarNome = (item) => {
     setItemToEdit(item.id);

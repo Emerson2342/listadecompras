@@ -16,7 +16,7 @@ export const ListaGeralContextProvider = ({ children }) => {
   const [listaGeral, setListaGeral] = useState([
     {
       id: 1,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Picanha",
       valor: 48.99,
       quantidade: 1,
@@ -26,7 +26,7 @@ export const ListaGeralContextProvider = ({ children }) => {
 
     {
       id: 2,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Carne de Sol",
       valor: 25.99,
       quantidade: 1,
@@ -35,7 +35,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 3,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Paleta Sem Osso",
       valor: 28.99,
       quantidade: 1,
@@ -44,7 +44,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 4,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Paleta Com Osso",
       valor: 23.99,
       quantidade: 1,
@@ -53,7 +53,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 5,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Músculo",
       valor: 20.99,
       quantidade: 1,
@@ -62,7 +62,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 6,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Bife",
       valor: 23.99,
       quantidade: 1,
@@ -71,7 +71,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 7,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Acém",
       valor: 23.99,
       quantidade: 1,
@@ -80,7 +80,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 8,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Costela Bovina",
       valor: 19.99,
       quantidade: 1,
@@ -89,7 +89,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 9,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Carne Moída",
       valor: 22.0,
       quantidade: 1,
@@ -98,7 +98,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 10,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Frango Inteiro",
       valor: 9.8,
       quantidade: 1,
@@ -107,7 +107,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 11,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Coxa e Sobrecoxa",
       valor: 11.99,
       quantidade: 1,
@@ -116,7 +116,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 12,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Asinha",
       valor: 15.0,
       quantidade: 1,
@@ -125,7 +125,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 13,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Frango a Passarinho",
       valor: 11.0,
       quantidade: 1,
@@ -134,7 +134,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 14,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Linguiça de Frango",
       valor: 13.99,
       quantidade: 1,
@@ -143,7 +143,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 15,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Salsicha",
       valor: 20.98,
       quantidade: 1,
@@ -152,7 +152,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 16,
-      tipo: "Acougue",
+      tipo: "Carnes",
       produto: "Bacon",
       valor: 23.99,
       quantidade: 1,
@@ -215,7 +215,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 23,
-      tipo: "HigienePessoal",
+      tipo: "Higiene Pessoal",
       produto: "Creme Dental",
       valor: 5.99,
       quantidade: 1,
@@ -224,7 +224,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 24,
-      tipo: "HigienePessoal",
+      tipo: "Higiene Pessoal",
       produto: "Papel Higiênico",
       valor: 9.8,
       quantidade: 1,
@@ -233,7 +233,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 25,
-      tipo: "HigienePessoal",
+      tipo: "Higiene Pessoal",
       produto: "Escova de Dente",
       valor: 4.9,
       quantidade: 1,
@@ -242,7 +242,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 26,
-      tipo: "HigienePessoal",
+      tipo: "Higiene Pessoal",
       produto: "Sabonete",
       valor: 2.99,
       quantidade: 1,
@@ -251,7 +251,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 27,
-      tipo: "HigienePessoal",
+      tipo: "Higiene Pessoal",
       produto: "Bucha de Banho",
       valor: 4.99,
       quantidade: 1,
@@ -260,7 +260,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 28,
-      tipo: "HigienePessoal",
+      tipo: "Higiene Pessoal",
       produto: "Shampoo",
       valor: 0,
       quantidade: 1,
@@ -268,7 +268,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 29,
-      tipo: "HigienePessoal",
+      tipo: "Higiene Pessoal",
       produto: "Condicionador",
       valor: 13.0,
       quantidade: 1,
@@ -276,7 +276,7 @@ export const ListaGeralContextProvider = ({ children }) => {
     },
     {
       id: 30,
-      tipo: "HigienePessoal",
+      tipo: "Higiene Pessoal",
       produto: "Desodorante",
       valor: 9.9,
       quantidade: 1,
@@ -284,14 +284,14 @@ export const ListaGeralContextProvider = ({ children }) => {
 
     {
       id: 31,
-      tipo: "HigienePessoal",
+      tipo: "Higiene Pessoal",
       produto: "Creme de pele",
       valor: 9.99,
       quantidade: 1,
     },
     {
       id: 32,
-      tipo: "HigienePessoal",
+      tipo: "Higiene Pessoal",
       produto: "Absorvente",
       valor: 12.9,
       quantidade: 1,

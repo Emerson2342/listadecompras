@@ -21,8 +21,8 @@
     "production": {}
   },
   "expo": {
-    "name": "listadecompras",
-    "version": "1.0.0",
+    "name": "Lista de Compras",
+    "version": "1.0.1",
     "extra": {
       "eas": {
         "projectId": "3bc58fbe-d23d-47cd-9605-7596fb5912b4"

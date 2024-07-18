@@ -20,14 +20,28 @@ import {
 import {
   MaterialIcons,
   MaterialCommunityIcons,
-  Ionicons,
 } from "react-native-vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
 
-export default function Limpeza() {
-  const navigation = useNavigation();
-  const { identificador, listaGeral, setListaGeral } = useListaGeralContext();
+export default function CategoryScreen({ route, navigation }) {
+  const { category } = route.params;
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: category,
+      headerStyle: {
+        backgroundColor: "#fff",
+      },
+      headerTintColor: "#4B0082",
+      headerTitleStyle: {
+        fontWeight: "bold",
+        fontSize: 30,
+      },
+      headerTitleAlign: "center"
+    });
+  }, [navigation])
+
+  const { listaGeral, setListaGeral } = useListaGeralContext();
 
   const [modalVisibleAdd, setModalVisibleAdd] = useState(false);
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
@@ -42,13 +56,13 @@ export default function Limpeza() {
     useState(false);
   const [itemToEdit, setItemToEdit] = useState(0);
 
-  const [limpeza, setLimpeza] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
 
   useEffect(() => {
-    const listaLimpeza = listaGeral
-      .filter((item) => item.tipo === "Limpeza")
+    const categoryList = listaGeral
+      .filter((item) => item.tipo === category)
       .sort((a, b) => a.produto.localeCompare(b.produto));
-    setLimpeza(listaLimpeza);
+    setCategoryList(categoryList);
   }, [listaGeral]);
 
   const editarNome = (item) => {
@@ -91,7 +105,7 @@ export default function Limpeza() {
   };
 
   const renderItem = ({ item, index }) => (
-    <View style={styles.limpezaContainer}>
+    <View style={styles.categoryContainer}>
       <TouchableOpacity onPress={() => editarNome(item)}>
         <Text style={styles.textProduto} numberOfLines={1}>
           {index + 1} - {item.produto}
@@ -139,7 +153,7 @@ export default function Limpeza() {
       <View style={styles.imgCarrinho}></View>
       <View style={styles.container}>
         <FlatList
-          data={limpeza}
+          data={categoryList}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           numColumns={2}
@@ -152,13 +166,13 @@ export default function Limpeza() {
           onPress={() => setModalVisibleAdd(true)}
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Adicionar Novos Itens</Text>
+          <Text style={styles.buttonText}>Adicionar Novo Produto</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("Carrinho")}
-          onLongPress={() => alert(JSON.stringify(limpeza, null, 2))}
+          onLongPress={() => alert(JSON.stringify(categoryList, null, 2))}
         >
           <Text style={styles.buttonText}>Itens do Carrinho</Text>
           <Image
@@ -171,7 +185,7 @@ export default function Limpeza() {
       <Modal visible={modalVisibleAdd} animationType="fade" transparent={true}>
         <ModalAdicionar
           handleClose={() => setModalVisibleAdd(false)}
-          tipo={"Limpeza"}
+          tipo={category}
         />
       </Modal>
 
@@ -248,7 +262,7 @@ const styles = StyleSheet.create({
     height: 560,
     alignSelf: "center",
   },
-  limpezaContainer: {
+  categoryContainer: {
     borderColor: "#9932CC",
     borderWidth: 1,
     borderRadius: 5,

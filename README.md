@@ -1,28 +1,39 @@
-![Página Principal](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/Home.jpg)![Página de Produtos](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/Produtos.jpg)
+# 📱 Lista de Compras
 
-![Página Carrinho](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/Carrinho.jpg)![Adicionar Novo Produto](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/AdicionarProdutoNovo.jpg)
+## ✨ Introdução✨
 
-![Editar Nome do Produto](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/EditarNome.jpg)![Editar Preço do Produto](https://github.com/Emerson2342/listadecompras/blob/main/Imagens/EditarPreco.jpg)
+Esta é minha **Lista de Compras**! Este projeto foi criado para conseguir auxiliar o usuário a organizar as suas compras. Principal função é adicionar os produtos no carrinho para não esquecer dos mesmos ao ir ao mercado.
+A Aplicação é bem simples, foi uma das primeiras que fiz, porém estou refatorando e melhorando ela.
 
+## 🚀 Funcionalidades
 
+- Adicionar produtos;
+- Remover Produtos;
+- Selecionar os produtos dentro da lista do carrinho, uma opção para saber se já pegou o produto ou não;
+- Ter prévia do valor das compras;
 
+## ⚙️ Tecnologias Utilizadas:
 
-#Informações
+    - ⚛️ React Native;
+    - ⚛️ Expo;
+    - 🚀 JavaScript;
 
-Aplicação feita em REACT usando o EXPO com finalidade de criar uma lista de compras para o usuário, adicionando produtos novos, podendo modificar os valores, nomes e até adicionando novos
-produtos. Estão separados por tipos de produtos, podendo adicioná-los ao carrinho para facilitar na hora de calcular o valor das compras.
-.
-Os dados ficam salvos no celular mesmo após fechando a aplicação.
+| ![Página Principal](/Imagens/Home.jpeg) | ![Página de Produtos](/Imagens/Produtos.jpeg) |
+| :-------------------------------------: | :-------------------------------------------: |
 
-#Instalação
+| ![Página Carrinho](Imagens/Carrinho.jpeg) | ![Adicionar Novo Produto](/Imagens/AdicionarProdutoNovo.jpeg) |
+| :---------------------------------------: | :-----------------------------------------------------------: |
 
-Aplicativo feito para usar no android.
-.
-Sendo uma aplicação fora da play store, vai ser necessário permitir instalar aplicações de fontes não confiáveis.
+| ![Editar Nome do Produto](/Imagens/EditarNome.jpg) | ![Editar Preço do Produto](/Imagens/EditarPreco.jpg) |
+| :------------------------------------------------: | :--------------------------------------------------: |
 
+## Licença
 
-#Suporte
+[![License](https://img.shields.io/badge/License-Custom-blue.svg)](LICENSE)
 
-Para suporte ou feedback, entre em contato via WhatsApp: +55 (61) 99835-4398 (https://wa.me/5561998354398)
-ou pelo email: lyncoln_erc@hotmail.com
+-**Suporte**
+Para suporte ou feedback, entre em contato via WhatsApp: +55 (61) 99835-4398 (https://wa.me/5561998354398) ou pelo email: lyncoln_erc@hotmail.com
 
+---
+
+2024 | Desenvolvido por Emerson Ribeiro

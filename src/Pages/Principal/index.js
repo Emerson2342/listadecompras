@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   TouchableOpacity,
@@ -8,7 +8,7 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
 import { MotiView } from "moti";
 
@@ -19,8 +19,7 @@ const data = [
   { id: "4", category: "Hortifruti" },
   { id: "5", category: "Temperos" },
   { id: "6", category: "Mercearia" },
-  { id: "7", category: "Açougue" },
-
+  { id: "7", category: "Carnes" },
 ];
 
 const imageMapping = {
@@ -30,13 +29,12 @@ const imageMapping = {
   Hortifruti: require("../../Imagens/hortifruti.jpg"),
   Temperos: require("../../Imagens/temperos.jpg"),
   Mercearia: require("../../Imagens/mercearia.jpg"),
-  Açougue: require("../../Imagens/acougue.jpg"),
+  Carnes: require("../../Imagens/acougue.jpg"),
 };
 
 export default function Principal({ navigation }) {
   const { listaGeral } = useListaGeralContext();
   const [keyAnimation, setKeyAnimation] = useState(1);
-  const [focusHome, setFocusHome] = useState(true);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -51,11 +49,23 @@ export default function Principal({ navigation }) {
     }, [])
   );
 
-  //const navigation = useNavigation();
-
-  const navigateToPage = (pageName) => {
-    navigation.navigate(pageName);
+  const navigateToPage = (category) => {
+    navigation.navigate('Category', { category });
   };
+  useEffect(() => {
+    navigation.setOptions({
+      title: "Seja Bem Vindo(a)",
+      headerStyle: {
+        backgroundColor: "#fff",
+      },
+      headerTintColor: "#4B0082",
+      headerTitleStyle: {
+        fontWeight: "bold",
+        fontSize: 30,
+      },
+      headerTitleAlign: "center"
+    });
+  }, [navigation])
 
   const renderItem = ({ item, index }) => {
 
@@ -97,7 +107,6 @@ export default function Principal({ navigation }) {
       >
         <Text style={styles.buttonText}>Itens do Carrinho</Text>
         <Image
-          style={{ right: -10 }}
           source={require("../../Imagens/carrinhoPrincipal.png")}
         />
       </TouchableOpacity>

@@ -66,7 +66,9 @@ export default function ModalAdicionar({ handleClose, tipo }) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
+        <Text style={styles.title}>Adicionar Novo Produto</Text>
         <View style={styles.inputContent}>
+
           <TextInput
             style={[styles.input, { color: "#0045b1" }]}
             placeholder="Digite um novo produto"
@@ -135,7 +137,6 @@ export default function ModalAdicionar({ handleClose, tipo }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "rgba(24,24,24,0.8)",
-    // backgroundColor: "rgba(75,0,130,0.3)",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -149,6 +150,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 3,
     borderColor: "#4B0082",
+  },
+  title: {
+    color:"#4B0082",
+    fontSize:20,
+    fontWeight:'bold'
   },
   input: {
     color: "#4b0",
