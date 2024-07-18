@@ -37,9 +37,9 @@ export default function CategoryScreen({ route, navigation }) {
         fontWeight: "bold",
         fontSize: 30,
       },
-      headerTitleAlign: "center"
+      headerTitleAlign: "center",
     });
-  }, [navigation])
+  }, [navigation]);
 
   const { listaGeral, setListaGeral } = useListaGeralContext();
 
@@ -87,16 +87,16 @@ export default function CategoryScreen({ route, navigation }) {
     item.valor <= 0
       ? setModalAvisoPreco(true)
       : setListaGeral((listaAntiga) => {
-        return listaAntiga.map((item) => {
-          if (item.id === id) {
-            item.cart
-              ? setModalRemovidoCarrinho(true)
-              : setModalAddCarrinhoVisible(true);
-            return { ...item, cart: !item.cart };
-          }
-          return item;
+          return listaAntiga.map((item) => {
+            if (item.id === id) {
+              item.cart
+                ? setModalRemovidoCarrinho(true)
+                : setModalAddCarrinhoVisible(true);
+              return { ...item, cart: !item.cart };
+            }
+            return item;
+          });
         });
-      });
   };
 
   const confirmar = (id) => {
@@ -149,8 +149,7 @@ export default function CategoryScreen({ route, navigation }) {
   );
 
   return (
-    <View>
-      <View style={styles.imgCarrinho}></View>
+    <View style={{ backgroundColor: "#fff" }}>
       <View style={styles.container}>
         <FlatList
           data={categoryList}
@@ -171,13 +170,13 @@ export default function CategoryScreen({ route, navigation }) {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("Carrinho")}
+          onPress={() => navigation.navigate("Lista")}
           onLongPress={() => alert(JSON.stringify(categoryList, null, 2))}
         >
-          <Text style={styles.buttonText}>Itens do Carrinho</Text>
+          <Text style={styles.buttonText}>Itens da Lista</Text>
           <Image
-            style={{ right: -10 }}
-            source={require("../../Imagens/carrinhoPrincipal.png")}
+            style={{ right: "-30%" }}
+            source={require("../../Imagens/list.png")}
           />
         </TouchableOpacity>
       </View>
@@ -261,17 +260,19 @@ const styles = StyleSheet.create({
     padding: 5,
     height: 560,
     alignSelf: "center",
+    backgroundColor: "#fff",
   },
   categoryContainer: {
     borderColor: "#9932CC",
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 3,
     marginLeft: "2%",
     marginRight: "2%",
     marginVertical: 3,
     width: "46%",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fff",
     height: 65,
+    elevation: 3,
   },
 
   textProduto: {
@@ -283,7 +284,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#4b0",
     fontSize: 17,
-    marginLeft: 3,
     textAlign: "center",
   },
   iconContainer: {
@@ -291,13 +291,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingLeft: 5,
     paddingRight: 5,
-    //  backgroundColor: "#cece",
     alignItems: "center",
     height: "85%",
   },
 
   button: {
-    marginTop: 10,
+    marginTop: "2%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#4B0082",
@@ -306,15 +305,7 @@ const styles = StyleSheet.create({
     width: "80%",
     alignSelf: "center",
     flexDirection: "row",
-    elevation: 9,
   },
-  imgCarrinho: {
-    position: "absolute",
-    right: 20,
-    top: 480,
-    zIndex: 4,
-  },
-
   buttonText: {
     color: "#fff",
     fontSize: 20,

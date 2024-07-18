@@ -1,29 +1,8 @@
 {
-  "cli": {
-    "version": ">= 5.9.3"
-  },
-  "build": {
-    "development": {
-      "distribution": "internal",
-      "android": {
-        "gradleCommand": ":app:assembleDebug"
-      },
-      "ios": {
-        "buildConfiguration": "Debug"
-      }
-    },
-    "preview": {
-      "distribution": "internal"
-    },
-    "production": {}
-  },
-  "submit": {
-    "production": {}
-  },
   "expo": {
     "name": "listadecompras",
     "displayName":"Lista de Compras",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "extra": {
       "eas": {
         "projectId": "3bc58fbe-d23d-47cd-9605-7596fb5912b4"

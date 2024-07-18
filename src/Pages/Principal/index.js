@@ -50,7 +50,7 @@ export default function Principal({ navigation }) {
   );
 
   const navigateToPage = (category) => {
-    navigation.navigate('Category', { category });
+    navigation.navigate("Category", { category });
   };
   useEffect(() => {
     navigation.setOptions({
@@ -63,36 +63,34 @@ export default function Principal({ navigation }) {
         fontWeight: "bold",
         fontSize: 30,
       },
-      headerTitleAlign: "center"
+      headerTitleAlign: "center",
     });
-  }, [navigation])
+  }, [navigation]);
 
   const renderItem = ({ item, index }) => {
-
     const index1 = index % 2;
     return (
-
       <MotiView
         key={keyAnimation}
         from={{ translateX: index1 == 1 ? 100 : -100 }}
         animate={{ translateX: 0 }}
-        transition={{ type: 'spring', duration: 6300 }}
+        transition={{ type: "spring", duration: 6300 }}
         style={styles.lista}
       >
-        <TouchableOpacity
-          onPress={() => navigateToPage(item.category)}
-        >
-          <ImageBackground source={imageMapping[item.category]} style={styles.img}>
+        <TouchableOpacity onPress={() => navigateToPage(item.category)}>
+          <ImageBackground
+            source={imageMapping[item.category]}
+            style={styles.img}
+          >
             <Text style={styles.text}>{item.category}</Text>
           </ImageBackground>
         </TouchableOpacity>
       </MotiView>
-    )
+    );
   };
 
   return (
     <View style={styles.container}>
-
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
@@ -102,12 +100,14 @@ export default function Principal({ navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Carrinho")}
+        onPress={() => navigation.navigate("Lista")}
         onLongPress={() => alert(JSON.stringify(listaGeral, null, 2))}
       >
-        <Text style={styles.buttonText}>Itens do Carrinho</Text>
+        <Text style={styles.buttonText}>Itens da Lista</Text>
+
         <Image
-          source={require("../../Imagens/carrinhoPrincipal.png")}
+          style={{ right: "-30%" }}
+          source={require("../../Imagens/list.png")}
         />
       </TouchableOpacity>
     </View>
@@ -117,33 +117,33 @@ export default function Principal({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   lista: {
-    margin: '3%'
+    margin: "3%",
   },
   text: {
-    color: "#363636",
+    fontStyle: "italic",
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
   },
-
   img: {
     height: 105,
     width: 169,
-    borderRadius: 7,
+    borderRadius: 5,
     overflow: "hidden",
     borderColor: "#9932CC",
     borderWidth: 3,
   },
   button: {
-    marginBottom: '15%',
-    justifyContent: "center",
+    marginBottom: "15%",
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#4B0082",
     borderRadius: 8,
     padding: 15,
-    width: "80%",
+    width: "70%",
     alignSelf: "center",
     flexDirection: "row",
   },

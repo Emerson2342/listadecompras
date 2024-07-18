@@ -9,7 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Principal from "./src/Pages/Principal";
 
-import Carrinho from "./src/Pages/Carrinho";
+import Lista from "./src/Pages/Lista";
 import CategoryScreen from "./src/Pages/CategoryScreen";
 
 const Stack = createStackNavigator();
@@ -27,10 +27,9 @@ export default function App() {
         <Stack.Navigator initialRouteName="Principal">
           <Stack.Screen name="Principal" component={Principal} />
           <Stack.Screen name="Category" component={CategoryScreen} />
-          <Stack.Screen name="Carrinho" component={Carrinho} />
+          <Stack.Screen name="Lista" component={Lista} />
         </Stack.Navigator>
       </ListaGeralContextProvider>
     </NavigationContainer>
   );
 }
-

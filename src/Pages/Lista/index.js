@@ -18,7 +18,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import { useListaGeralContext } from "../../Context/ListaGeralContext";
 import { MotiView } from "moti";
 
-export default function Carrinho({ navigation }) {
+export default function Lista({ navigation }) {
   const { listaGeral, setListaGeral } = useListaGeralContext();
   const [modalVisibleNome, setModalVisibleNome] = useState(false);
   const [modalVisibleValor, setModalVisibleValor] = useState(false);
@@ -28,17 +28,9 @@ export default function Carrinho({ navigation }) {
     useState(false);
   const [carrinhoApagadoVisible, setCarrinhoApagadoVisible] = useState(false);
 
-
-
   const [carrinho, setCarrinho] = useState([]);
   const [valorTotal, setValorTotal] = useState(0);
-
-  useEffect(() => {
-    const carrinhoFiltrado = listaGeral
-      .filter((item) => item.cart == true)
-      .sort((a, b) => a.produto.localeCompare(b.produto));
-    setCarrinho(carrinhoFiltrado);
-  }, [listaGeral]);
+  const [valorCarrinho, setValorCarrinho] = useState(0);
 
   useEffect(() => {
     navigation.setOptions({
@@ -50,9 +42,33 @@ export default function Carrinho({ navigation }) {
         fontWeight: "bold",
         fontSize: 30,
       },
-      headerTitleAlign: "center"
+      headerTitleAlign: "center",
     });
-  }, [])
+  }, []);
+  useEffect(() => {
+    const carrinhoFiltrado = listaGeral
+      .filter((item) => item.cart == true)
+      .sort((a, b) => a.produto.localeCompare(b.produto));
+    setCarrinho(carrinhoFiltrado);
+  }, [listaGeral]);
+
+  useEffect(() => {
+    let totalCarrinho = 0;
+    let totalLista = 0;
+
+    const carrinhoFiltrado = carrinho.filter((item) => item.selected == true);
+
+    carrinho.forEach((item) => {
+      totalLista += item.valor * (item.quantidade || 1);
+    });
+    setValorTotal(totalLista);
+
+    carrinhoFiltrado.forEach((item) => {
+      totalCarrinho += item.valor * (item.quantidade || 1);
+    });
+
+    setValorCarrinho(totalCarrinho);
+  }, [carrinho]);
 
   const editarNome = (item) => {
     setItemToEdit(item.id);
@@ -124,23 +140,18 @@ export default function Carrinho({ navigation }) {
     });
   };
 
-  useEffect(() => {
-    let total = 0;
-    carrinho.forEach((item) => {
-      total += item.valor * (item.quantidade || 1);
-    });
-    setValorTotal(total);
-  }, [carrinho]);
-
   const renderItem = ({ item, index }) => {
     return (
       <MotiView
-        style={item.selected ? [styles.listaContainer, { backgroundColor: '#FFB347' }] : styles.listaContainer}
-        from={{ rotateX: '90deg', opacity: 1 }}
-        animate={{ rotateX: '0deg', opacity: 1 }}
+        style={
+          item.selected
+            ? [styles.listaContainer, { backgroundColor: "#FFB347" }]
+            : styles.listaContainer
+        }
+        from={{ rotateX: "90deg", opacity: 1 }}
+        animate={{ rotateX: "0deg", opacity: 1 }}
         transition={{ type: "spring", duration: 5000 + index * 90 }}
       >
-
         <View style={styles.superior}>
           {item.produto && item.produto.trim() !== "" && (
             <TouchableOpacity
@@ -174,15 +185,29 @@ export default function Carrinho({ navigation }) {
               style={{ alignSelf: "center" }}
               onPress={() => handleSelected(item.id, item, index)}
             >
-              {item.selected ? <MaterialCommunityIcons name="checkbox-outline" size={25} color="#9932CC" /> :
-                <MaterialCommunityIcons name="checkbox-blank-outline" size={25} color="#9932CC" />}
-
+              {item.selected ? (
+                <MaterialCommunityIcons
+                  name="cart-check"
+                  size={25}
+                  color="#9932CC"
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  name="cart-outline"
+                  size={25}
+                  color="#9932CC"
+                />
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               style={{ alignSelf: "center" }}
               onPress={() => removerItem(item.id)}
             >
-              <MaterialCommunityIcons name="cart-remove" size={25} color="red" />
+              <MaterialCommunityIcons
+                name="playlist-remove"
+                size={25}
+                color="red"
+              />
             </TouchableOpacity>
           </View>
 
@@ -236,7 +261,7 @@ export default function Carrinho({ navigation }) {
           </View>
         </View>
       </MotiView>
-    )
+    );
   };
 
   return (
@@ -250,14 +275,13 @@ export default function Carrinho({ navigation }) {
             numColumns={1}
           />
         ) : (
-          <Text style={styles.textVazio}>Carrinho está vazio!</Text>
+          <Text style={styles.textVazio}>Lista está vazia!</Text>
         )}
       </View>
-
       <View style={styles.resumo}>
         <View style={styles.resumoContent}>
-          <Text style={styles.textText}>TOTAL</Text>
-          <Text style={[styles.textTotal, { fontSize: 30 }]}>
+          <Text style={styles.textText}>VALOR TOTAL DA LISTA</Text>
+          <Text style={[styles.textTotal, { fontSize: 20 }]}>
             R${" "}
             {valorTotal.toLocaleString("pt-BR", {
               minimumFractionDigits: 2,
@@ -266,12 +290,25 @@ export default function Carrinho({ navigation }) {
           </Text>
         </View>
       </View>
+      <View style={styles.resumo}>
+        <View style={[styles.resumoContent, { borderTopWidth: 0 }]}>
+          <Text style={styles.textText}>VALOR TOTAL DO CARRINHO</Text>
+          <Text style={[styles.textTotal, { fontSize: 20 }]}>
+            R${" "}
+            {valorCarrinho.toLocaleString("pt-BR", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
+          </Text>
+        </View>
+      </View>
+
       <TouchableOpacity
         style={styles.button}
         onPress={() => handleConfimar()}
         onLongPress={() => alert(JSON.stringify(carrinho, null, 2))}
       >
-        <Text style={styles.buttonText}>Esvaziar Carrinho</Text>
+        <Text style={styles.buttonText}>Limpar Lista</Text>
       </TouchableOpacity>
       <Modal visible={modalVisibleNome} animationType="fade" transparent={true}>
         <ModalEditarNome
